@@ -1,2 +1,14 @@
+# Tasks
+- [x] Draw avatar assets
+- [x] Make avatars display in JS
+- [x] Represent avatars in backend
+- [ ] Flush out encoding and decoding to DNA
+- [ ] Make caching infrastructure(s) for the server
+- [ ] Make prototype of challenge
+- [ ] Write workable solution
+- [ ] Create cosmetics/story for website
+- [ ] Playtests!
+
 # Thing to remember to correct
 - [ ] Rename title in base template
+- [ ] Make proper documentation for avatar.py
