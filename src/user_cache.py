@@ -44,7 +44,6 @@ class LRUSessionCache:
         @wraps(func)
         def cached_func(*args, **kwargs):
             self.set_modified()     # makes sure the cache update flows to user
-            print(self._cache)
             parameters = self._encode_params(*args, **kwargs)
             fetched = self[parameters]
             if fetched is not None:
