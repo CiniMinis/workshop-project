@@ -122,6 +122,7 @@ class AvatarBase(ABC):
     """
     _BODY_PART_TYPES = []
     __PART_NAME_TO_INDEX = {}
+    BITS_IN_NUCLEOTIDE = 2
 
     def __new__(cls, *args, **kwargs):
         """
@@ -173,6 +174,28 @@ class AvatarBase(ABC):
         parts = [p_type.from_bitstring(s) for s, p_type in zip(
             part_strings, cls._BODY_PART_TYPES)]
         return cls(*parts)
+
+    def to_dna(self):
+        chunk_size = self.BITS_IN_NUCLEOTIDE
+        bitstring = self.to_bitstring()
+        pad = (-len(bitstring) % chunk_size) * '0'
+        bitstring = pad + bitstring
+        chunks = [bitstring[i: i + chunk_size] for i in range(0, len(bitstring), chunk_size)]
+        dna_list = [DNANucleotide(int(chunk, 2)) for chunk in chunks]
+        return ''.join([nucleotide.name for nucleotide in dna_list])
+    
+    @classmethod
+    def from_dna(cls, dna_string):
+        chunk_size = cls.BITS_IN_NUCLEOTIDE
+        dna_numbers = [DNANucleotide[ch].value for ch in dna_string]
+        bitstring = ''.join([f"{num:0b}".zfill(chunk_size) for num in dna_numbers])
+        needed_len = cls.bit_len()
+        if not (0 <= len(bitstring) - needed_len < chunk_size):
+            raise ValueError("DNA string is too long")
+        pad, bitstring = bitstring[:-needed_len], bitstring[-needed_len:]
+        if '1' in pad:
+            raise ValueError("DNA string is too long")
+        return cls.from_bitstring(bitstring)
 
     @classmethod
     def randomize(cls):
