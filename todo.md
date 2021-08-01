@@ -12,3 +12,4 @@
 # Thing to remember to correct
 - [ ] Rename title in base template
 - [ ] Make proper documentation for avatar.py
+- [ ] Make proper documentation for user_cache.py
