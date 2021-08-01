@@ -13,6 +13,7 @@ def lru_cached(max_size=DEFAULT_SIZE):
 
         @wraps(func)
         def cached_func(*args, **kwargs):
+            cache_name = cached_func.cache_name
             if cache_name not in session:
                 user_cache = {}
             else:
@@ -37,6 +38,7 @@ def lru_cached(max_size=DEFAULT_SIZE):
 
             return result
 
+        cached_func.cache_name = cache_name
         return cached_func
 
     return decorator
