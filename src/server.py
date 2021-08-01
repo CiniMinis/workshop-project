@@ -1,7 +1,7 @@
 from flask import *
 from avatar import AvatarBase, BodyPart
 import os
-from user_cache import LRUSessionCache
+from user_cache import *
 
 # directory constants
 STATIC_DIR = "static"
@@ -72,11 +72,11 @@ def home():
     return render_template("index.html")
 
 
-@LRUSessionCache(16)
+@AesLRUSessionCache(max_size=16)
 def get_secret(part):
     try:
         selected = secret_avatar[part]
-        return (selected.variation, selected.color)
+        return str((selected.variation, selected.color))
     except KeyError:
         return None
 
