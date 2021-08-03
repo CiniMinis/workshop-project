@@ -3,6 +3,7 @@ from avatar import AvatarBase, BodyPart
 import os
 import json
 from user_cache import *
+from db import UserFactory
 
 # directory constants
 STATIC_DIR = "static"
@@ -14,7 +15,6 @@ SESSION_KEY_BYTES = 32
 
 app = Flask(__name__)
 app.secret_key = os.urandom(SESSION_KEY_BYTES)
-
 
 class Avatar(AvatarBase):
     pass
@@ -55,6 +55,9 @@ class Mouth(BodyPart):
     VARIATIONS = 4
     IS_COLORABLE = True
 
+user_factory = UserFactory(Avatar)
+for _ in range(10):
+    print(user_factory.randomize())
 
 secret_avatar = Avatar.randomize()
 
