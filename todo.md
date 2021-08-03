@@ -10,6 +10,7 @@
 - [ ] Playtests!
 
 # Thing to remember to correct
+- [ ] Allow cached functions to return any object
 - [ ] Rename title in base template
 - [ ] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [ ] Make proper documentation for avatar.py

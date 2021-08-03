@@ -1,5 +1,6 @@
 const AVATAR_WIDTH = 500;
 const AVATAR_HEIGHT = AVATAR_WIDTH;
+const AVATAR_BODY_PARTS = ["body", "ears", "head", "mouth", "eyes", "nose"];
 
 function fetch_image(src) {
     return new Promise((resolve) => {
@@ -32,6 +33,29 @@ function draw_promise(context, img) {
     return new Promise((resolve) => {
         context.drawImage(img, 0, 0);
         resolve();
+    });
+}
+
+function draw_json_part(context, json) {
+    return new Promise((resolve) => {
+        // variable for promises to which we wait
+        let promises = []
+        console.log(json);
+        // draw the body part
+        promises.push(
+            fetch_image(json['border_image'])
+                .then(draw_promise.bind(undefined, context))
+        );
+        
+        if (!!json['color_image']) {
+            promises.push(
+                fetch_image(json['color_image']['image'])
+                    .then(recolor_image.bind(undefined, json['color_image']['rgb']))
+                    .then(draw_promise.bind(undefined, context))
+            );
+        }
+        
+        Promise.allSettled(promises).then(resolve);
     });
 }
 
@@ -77,10 +101,10 @@ function randomColor() {
 }
 
 // clears the canvas
-function clearCanvas() {
+function clearCanvas(canvas) {
     return new Promise(resolve => {
-        // Temporary, Drawing on test canvas
-        const canvas = document.getElementById("TestCanvas");
+        // // Temporary, Drawing on test canvas
+        // const canvas = document.getElementById("TestCanvas");
         const ctx = canvas.getContext("2d");
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);

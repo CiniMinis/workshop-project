@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content%}
+<script src='/static/draw.js'></script>
+    <center>
+        <h1>
+            Draw DNA
+        </h1>
+        <br>
+        <br>
+        <canvas class="avatar border border-primary" id="drawDNACanvas"></canvas>
+        <br>
+        <input type="text" id="dnaToDraw" size="80"/>
+        <button type="button" class="btn btn-primary" id="drawDNABtn" onclick="draw_dna();">Draw</button>
+    </center>
+
+{% endblock %}

@@ -6,8 +6,6 @@ from random import randint
 
 """ Enum for encoding the base units of DNA """
 DNANucleotide = Enum('DNANucleotide', 'C G A T', start=0)
-# TODO: Make encoding of even-length bit string, to DNA
-
 
 # number of bits a number in [0, x) takes to represent
 def _bit_length(x): return int(ceil(log2(x)))
@@ -47,6 +45,10 @@ class BodyPart(ABC):
             "color must be specified if and only if the body part is colorable"
         self.variation = variation
         self.color = color
+    
+    def __repr__(self):
+        part_name = self.__class__.__name__
+        return f"{part_name}(variation={self.variation!r}, color={self.color!r})"
 
     def _encode_variation(self):
         if self.VARIATIONS == 1:
@@ -187,6 +189,12 @@ class AvatarBase(ABC):
     @classmethod
     def from_dna(cls, dna_string):
         chunk_size = cls.BITS_IN_NUCLEOTIDE
+
+        allowed_chars = [e.name for e in DNANucleotide]
+
+        if any([(c not in allowed_chars) for c in dna_string]):
+            raise ValueError("Invalid DNA string.")
+        
         dna_numbers = [DNANucleotide[ch].value for ch in dna_string]
         bitstring = ''.join([f"{num:0b}".zfill(chunk_size) for num in dna_numbers])
         needed_len = cls.bit_len()
