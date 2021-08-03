@@ -61,5 +61,4 @@ class UserFactory:
 
     def randomize(self):
         random_vals = {key: rand(self) for key, rand in self.randomizers.items()}
-        print(random_vals)
         return User(**random_vals)

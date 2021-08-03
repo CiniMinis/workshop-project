@@ -19,7 +19,6 @@ def static_files(path):
 
 @views.route('/')
 def home():
-    print("HERE")
     return render_template("index.html")
 
 
