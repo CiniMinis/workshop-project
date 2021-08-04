@@ -59,68 +59,14 @@ function draw_json_part(context, json) {
     });
 }
 
-function generate_body_part(body_part, type, color = null) {
-    return new Promise((resolve) => {
-        // Temporary, Drawing on test canvas
-        const canvas = document.getElementById("TestCanvas");
-        const ctx = canvas.getContext("2d");
-
-        // interior is colored, border doesn't change
-        let part_interior = `/img/avatar/${body_part}/color${type}.png`;
-        let part_border = `/img/avatar/${body_part}/border${type}.png`;
-
-        // variable for promises to which we wait
-        let promises = []
-
-        // draw the body part
-        promises.push(
-            fetch_image(part_border)
-                .then(draw_promise.bind(undefined, ctx))
-        );
-
-        if (color) {
-            promises.push(
-                fetch_image(part_interior)
-                    .then(recolor_image.bind(undefined, color))
-                    .then(draw_promise.bind(undefined, ctx))
-            );
-        }
-
-        Promise.allSettled(promises).then(resolve);
-    });
-}
-
-// random int from start with amount possibilities
-function randInt(amount, start = 1) {
-    return start + Math.floor(Math.random() * amount);
-}
-
-// randomly selects an RGB color
-function randomColor() {
-    return "#" + randInt(2 ** 24, 0).toString(16);
-}
-
 // clears the canvas
 function clearCanvas(canvas) {
     return new Promise(resolve => {
-        // // Temporary, Drawing on test canvas
-        // const canvas = document.getElementById("TestCanvas");
         const ctx = canvas.getContext("2d");
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         resolve();
     });
-}
-
-// randomly set a face
-function randomizeFace() {
-    clearCanvas()
-        .then(() => { return generate_body_part("body", "1", randomColor()) })
-        .then(() => { return generate_body_part("ears", randInt(2), randomColor()) })
-        .then(() => { return generate_body_part("head", randInt(4), randomColor()) })
-        .then(() => { return generate_body_part("eyes", randInt(4), randomColor()) })
-        .then(() => { return generate_body_part("mouth", randInt(4), randomColor()) })
-        .then(() => { return generate_body_part("nose", randInt(2)) });
 }
 
 $().ready(() => {
