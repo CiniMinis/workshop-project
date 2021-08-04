@@ -1,6 +1,7 @@
 const AVATAR_WIDTH = 500;
 const AVATAR_HEIGHT = AVATAR_WIDTH;
 const AVATAR_BODY_PARTS = ["body", "ears", "head", "mouth", "eyes", "nose"];
+const PRIVATE_AVATAR = "/img/avatar/private.svg";
 
 function fetch_image(src) {
     return new Promise((resolve) => {
@@ -40,7 +41,6 @@ function draw_json_part(context, json) {
     return new Promise((resolve) => {
         // variable for promises to which we wait
         let promises = []
-        console.log(json);
         // draw the body part
         promises.push(
             fetch_image(json['border_image'])
@@ -59,6 +59,16 @@ function draw_json_part(context, json) {
     });
 }
 
+
+// draws private user image
+function draw_private_avatar(context) {
+    return new Promise((resolve) => {
+        fetch_image(PRIVATE_AVATAR)
+            .then(draw_promise.bind(undefined, context))
+            .then(resolve);
+    });
+}
+
 // clears the canvas
 function clearCanvas(canvas) {
     return new Promise(resolve => {
@@ -69,10 +79,49 @@ function clearCanvas(canvas) {
     });
 }
 
+// fetches body part from user id
+function fetch_part_from_user(user_id, part) {
+    return new Promise((resolve, reject) => {
+        var request = $.ajax({
+            url: '/api/part_from_user',
+            type: 'POST',
+            data: {
+                'id': user_id,
+                'part': part
+            }
+        });
+        request.done((result) => {
+            if (result['status'] === 'success'){
+                resolve(result['content'])
+            }
+            reject(result['content'])
+        });
+    });
+}
+
+function draw_user(canvas, user_id){
+    var ctx = canvas.getContext('2d');
+    var json_parts = AVATAR_BODY_PARTS.map(fetch_part_from_user.bind(undefined, user_id));
+    last_promise = clearCanvas(canvas);
+    for (let i = 0; i < json_parts.length; i++) {
+        last_promise = Promise.all([json_parts[i], last_promise])
+            .then((vals) => {
+                return draw_json_part(ctx, vals[0]);
+            });
+    }
+    last_promise.catch((err) => {draw_private_avatar(ctx)});
+}
+
+
 $().ready(() => {
     // set avatars to correct size
-    $(".avatar").each((i, avatar) => {
-        avatar.width = AVATAR_WIDTH;
-        avatar.height = AVATAR_HEIGHT;
-    });
+    $(".avatar")
+        .each((i, avatar) => {
+            avatar.width = AVATAR_WIDTH;
+            avatar.height = AVATAR_HEIGHT;
+        }).filter("[data-user-id]")
+        .each((i, avatar) => {
+            user_id = avatar.getAttribute("data-user-id");
+            draw_user(avatar, user_id)
+        });
 });

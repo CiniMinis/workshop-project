@@ -1,4 +1,14 @@
 canvas.avatar {
+    width: 125px;
+    height: 125px;
+}
+
+canvas.avatar-small {
+    width: 70px;
+    height: 70px
+}
+
+canvas.avatar-big {
     width: 250px;
     height: 250px;
 }

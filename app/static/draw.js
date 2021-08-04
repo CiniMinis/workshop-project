@@ -27,7 +27,6 @@ function draw_dna(){
     for (let i = 0; i < json_parts.length; i++) {
         last_promise = Promise.all([json_parts[i], last_promise])
             .then((vals) => {
-                console.log(vals);
                 return draw_json_part(ctx, vals[0]);
             });
     }

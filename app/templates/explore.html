@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <center>
+        <h1>
+            Explore Users
+        </h1>
+        {% for user in users %}
+            <br/>
+            <div class='profile'>
+                <p>
+                    {{user.name}}
+                </p>
+                <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
+            </div>
+        {% endfor %}
+    </center>
+
+{% endblock %}
