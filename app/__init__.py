@@ -1,10 +1,21 @@
 from flask import Flask
-from os import urandom
-import app.config as config
+from flask_sqlalchemy import SQLAlchemy
+from app import config
+from instance import app_config_type
+from app.config import AppConfigFactory
 from app.api import api
 from app.views import views
 
-app = Flask(__name__)
-app.register_blueprint(api)
-app.register_blueprint(views)
-app.secret_key = urandom(config.SESSION_KEY_BYTES)
+db = SQLAlchemy()
+config_factory = AppConfigFactory()
+
+def create_app():
+    app = Flask(__name__)
+    # configuration for development
+    app_config = config_factory.make(app_config_type)
+    app.config.from_object(app_config)
+    app.register_blueprint(api)
+    app.register_blueprint(views)
+    db.init_app(app)
+
+    return app
