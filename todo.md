@@ -4,10 +4,11 @@
 - [x] Represent avatars in backend
 - [x] Flush out encoding and decoding to DNA
 - [x] Make caching infrastructure(s) for the server
-- [ ] Create and populate user database
+- [x] Create and populate user database
 - [ ] Make prototype of challenge
 - [ ] Write working solution
 - [ ] Create cosmetics/story for website
+- [ ] Make configurations for production and testing
 - [ ] Playtests!
 
 # Mini-Tasks
