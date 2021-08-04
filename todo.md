@@ -5,15 +5,15 @@
 - [x] Flush out encoding and decoding to DNA
 - [x] Make caching infrastructure(s) for the server
 - [x] Create and populate user database
-- [ ] Make prototype of challenge
+- [x] Make prototype of challenge - I finished all essential logic!!!
 - [ ] Write working solution
 - [ ] Create cosmetics/story for website
 - [ ] Make configurations for production and testing
 - [ ] Playtests!
 
 # Mini-Tasks
+- [ ] Maybe clean-up the async vs. sync logic in make_json_api.
 - [ ] Allow cached functions to return any object
 - [ ] Rename title in base template
 - [ ] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
-- [ ] Make proper documentation for avatar.py
-- [ ] Make proper documentation for user_cache.py
+- [ ] Make proper documentation for everything!!!
