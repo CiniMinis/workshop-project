@@ -4,7 +4,7 @@ from flask import send_from_directory, render_template, Blueprint
 STATIC_DIR = "static"
 IMAGE_DIR = "static/img"
 
-controllers = Blueprint('views', __name__)
+controllers = Blueprint('controllers', __name__)
 
 
 @controllers.route('/img/<path:image>')
