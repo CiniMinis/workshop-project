@@ -12,6 +12,7 @@
 - [ ] Playtests!
 
 # Mini-Tasks
+- [ ] Parallelize and improve performance of attack script
 - [ ] Maybe clean-up the async vs. sync logic in make_json_api.
 - [ ] Allow cached functions to return any object
 - [ ] Rename title in base template
