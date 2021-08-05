@@ -2,7 +2,8 @@ from enum import Enum
 from math import log2, ceil
 from abc import abstractmethod, ABC
 from functools import reduce
-from random import randint
+from random import randint, choice
+from app.modules.colors import COLOR_NAMES
 
 """ Enum for encoding the base units of DNA """
 DNANucleotide = Enum('DNANucleotide', 'C G A T', start=0)
@@ -15,7 +16,7 @@ class BodyPart(ABC):
     """
         Abstract base class for body parts
     """
-    RGB_BIT_LEN = 24    # length in bits of an rgb color
+    COLOR_BIT_LEN = 6    # length in bits a color selection
 
     @property
     @abstractmethod
@@ -31,7 +32,7 @@ class BodyPart(ABC):
     def bit_len(cls):
         cls_len = _bit_length(cls.VARIATIONS)
         if cls.IS_COLORABLE:
-            cls_len += cls.RGB_BIT_LEN
+            cls_len += cls.COLOR_BIT_LEN
         return cls_len
 
     def __init__(self, variation=None, color=None):
@@ -62,25 +63,18 @@ class BodyPart(ABC):
         return int(decode_string, 2)
 
     def _encode_color(self):
-        encoding = ""
         if not self.IS_COLORABLE:
-            return encoding
-
-        for val in self.color:
-            encoding += f"{val:08b}"
-        return encoding
+            return ""
+        color_index = COLOR_NAMES.index(self.color)
+        return f"{color_index:0b}".zfill(self.COLOR_BIT_LEN)
 
     @staticmethod
     def _decode_color(decode_string):
         if len(decode_string) == 0:
             return None
 
-        byte_size = 8
-        color = []
-        for i in range(0, BodyPart.RGB_BIT_LEN, byte_size):
-            color.append(int(decode_string[i: i+byte_size], 2))
-
-        return tuple(color)
+        decoded_int = int(decode_string, 2)
+        return COLOR_NAMES[decoded_int]
 
     def to_bitstring(self):
         return self._encode_variation() + self._encode_color()
@@ -91,8 +85,8 @@ class BodyPart(ABC):
 
         # if required decode color
         if cls.IS_COLORABLE:
-            color = cls._decode_color(decode_string[-cls.RGB_BIT_LEN:])
-            decode_string = decode_string[:-cls.RGB_BIT_LEN]
+            color = cls._decode_color(decode_string[-cls.COLOR_BIT_LEN:])
+            decode_string = decode_string[:-cls.COLOR_BIT_LEN]
         else:
             color = None
 
@@ -105,7 +99,7 @@ class BodyPart(ABC):
     def randomize(cls):
         # if required generate color
         if cls.IS_COLORABLE:
-            color = tuple(randint(0, 255) for _ in range(3))
+            color = choice(COLOR_NAMES)
         else:
             color = None
 
@@ -199,10 +193,10 @@ class AvatarBase(ABC):
         bitstring = ''.join([f"{num:0b}".zfill(chunk_size) for num in dna_numbers])
         needed_len = cls.bit_len()
         if not (0 <= len(bitstring) - needed_len < chunk_size):
-            raise ValueError("DNA string is too long")
+            raise ValueError("Bad DNA string length")
         pad, bitstring = bitstring[:-needed_len], bitstring[-needed_len:]
         if '1' in pad:
-            raise ValueError("DNA string is too long")
+            raise ValueError("Bad DNA string length")
         return cls.from_bitstring(bitstring)
 
     @classmethod

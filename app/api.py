@@ -11,10 +11,6 @@ api = Blueprint('api', __name__, url_prefix='/api')
 PART_URL_TEMPLATE = "/img/avatar/{}/"
 
 
-def rgb_to_hex(color):
-    return '#' + ''.join([f"{col:x}" for col in color])
-
-
 def make_json_api(*args, **kwargs):
     def decorator(func):
         @wraps(func)
@@ -50,7 +46,7 @@ def make_json_api(*args, **kwargs):
     return decorator
 
 
-@AesLRUSessionCache(max_size=16)
+@AesLRUSessionCache(max_size=10)
 def part_to_dict(part):
     part_name = part.__class__.__name__.lower()
     part_path = PART_URL_TEMPLATE.format(part_name)
@@ -61,7 +57,7 @@ def part_to_dict(part):
     if part.IS_COLORABLE:
         color_image = f"{part_path}color{part.variation}.png"
         color_dict = {'image': color_image,
-                      'rgb': rgb_to_hex(part.color)}
+                      'rgb': part.color}
     else:
         color_dict = None
     part_dict['color_image'] = color_dict
