@@ -6,7 +6,7 @@
 - [x] Make caching infrastructure(s) for the server
 - [x] Create and populate user database
 - [x] Make prototype of challenge - I finished all essential logic!!!
-- [ ] Write working solution
+- [x] Write working solution - POC SOLUTION WORKS FOR LEAKING PARTS!!!
 - [ ] Create cosmetics/story for website
 - [ ] Make configurations for production and testing
 - [ ] Playtests!
