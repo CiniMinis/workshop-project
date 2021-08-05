@@ -5,15 +5,20 @@
         <h1>
             Explore Users
         </h1>
-        {% for user in users %}
-            <br/>
-            <div class='profile'>
-                <p>
-                    {{user.name}}
-                </p>
-                <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
+        <br/>
+        <div class="card-group w-75">
+            {% for user in users %}
+            <div class="card">
+                <div class="card-body">
+                    <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
+                    <h5 class="card-title">
+                        {{user.name}}
+                    </h5>
+                </div>
             </div>
+            <br/>
         {% endfor %}
+        </div>
     </center>
 
 {% endblock %}
