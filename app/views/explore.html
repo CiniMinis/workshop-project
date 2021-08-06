@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-
+    <script src='/static/explore.js'></script>
     <center>
         <h1>
             Explore Users
         </h1>
         <br/>
-        <div class="card-group w-75">
+        <div class="card-group w-75" id="exploreUsers">
             {% for user in users %}
             <div class="card">
                 <div class="card-body">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <br/>
-        {% endfor %}
+            {% endfor %}
         </div>
     </center>
 

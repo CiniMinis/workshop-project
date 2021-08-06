@@ -9,7 +9,7 @@ IMAGE_DIR = "static/img"
 # display constants
 EXPLORE_COUNT = 5
 
-controllers = Blueprint('controllers', __name__)
+controllers = Blueprint('controllers', __name__, template_folder="views")
 
 
 @controllers.route('/img/<path:image>')

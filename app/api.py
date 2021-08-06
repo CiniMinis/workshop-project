@@ -6,7 +6,7 @@ from functools import wraps
 import asyncio
 import json
 
-api = Blueprint('api', __name__, url_prefix='/api')
+api = Blueprint('api', __name__, url_prefix='/api', template_folder="api_snippets")
 
 PART_URL_TEMPLATE = "/img/avatar/{}/"
 
