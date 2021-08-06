@@ -27,13 +27,21 @@ class AppDevConfig(AppConfig):
     DB_NAME = 'development.db'
     DEBUG = True
 
-# TODO: make configurations for testing and production
+# configuration for testing
+class AppTestConfig(AppConfig):
+    DB_NAME = 'development.db'
+    TESTING = True
+
+# TODO: make configurations for production
 
 class AppConfigFactory:
     DEV_NAMES = ['dev', 'development']  # names for development
+    TEST_NAMES = ['test', 'testing']
 
     def make(self, config_type):
         if config_type in self.DEV_NAMES:
             return AppDevConfig()
+        if config_type in self.TEST_NAMES:
+            return AppTestConfig()
         
         raise ValueError("Invalid Config Type")
