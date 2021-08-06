@@ -6,18 +6,10 @@
             Explore Users
         </h1>
         <br/>
-        <div class="card-group w-75" id="exploreUsers">
-            {% for user in users %}
-            <div class="card">
-                <div class="card-body">
-                    <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
-                    <h5 class="card-title">
-                        <a href="/user/{{user.user_id}}" >{{user.name}}</a>
-                    </h5>
-                </div>
-            </div>
-            <br/>
-            {% endfor %}
+        <div class="container w-75">
+            <ul class="list-group list-group-horizontal align-items-stretch flex-wrap" id="exploreUserList">
+                {% include "snippets/users_as_list_items.html" %}
+            </ul>
         </div>
     </center>
 

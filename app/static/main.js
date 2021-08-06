@@ -2,6 +2,8 @@ const AVATAR_WIDTH = 500;
 const AVATAR_HEIGHT = AVATAR_WIDTH;
 const AVATAR_BODY_PARTS = ["body", "ears", "head", "mouth", "eyes", "nose"];
 const PRIVATE_AVATAR = "/img/avatar/private.svg";
+const USER_ID_ATTR = "data-user-id";
+const WAS_DRAWN_NAME = "was-drawn";
 
 function fetch_image(src) {
     return new Promise((resolve) => {
@@ -129,14 +131,25 @@ function draw_user(canvas, user_id){
 }
 
 function prepare_avatar(avatar) {
+    // dont redraw drawn canvases
+    if ($(avatar).data(WAS_DRAWN_NAME))
+        return;
+    
+    $(avatar).data(WAS_DRAWN_NAME, true);
+
+    // initialize basic avatar properties
     avatar.width = AVATAR_WIDTH;
     avatar.height = AVATAR_HEIGHT;
-    if (!avatar.hasAttribute("data-user-id"))
+
+    // if avatar is bound to a user id, draw it
+    if (!avatar.hasAttribute(USER_ID_ATTR))
         return;
-    user_id = avatar.getAttribute("data-user-id");
+    user_id = avatar.getAttribute(USER_ID_ATTR);
     draw_user(avatar, user_id);
 }
 
-$().ready(() => {
+function draw_all_avatars(){
     $(".avatar").map((i, avatar) => {prepare_avatar(avatar)});
-});
+}
+
+$().ready(draw_all_avatars);

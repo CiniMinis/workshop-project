@@ -1,13 +1,15 @@
 from app.models import User
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint, render_template
 from app.modules.user_cache import AesLRUSessionCache
 from app.config.avatar import Avatar
 from functools import wraps
+from sqlalchemy.sql.expression import func
 import asyncio
 import json
 
-api = Blueprint('api', __name__, url_prefix='/api', template_folder="api_snippets")
+api = Blueprint('api', __name__, url_prefix='/api', template_folder="views/snippets")
 
+# general API consts
 PART_URL_TEMPLATE = "/img/avatar/{}/"
 
 
@@ -110,3 +112,11 @@ async def part_from_user():
         raise ValueError("You are not allowed to view this user")
 
     return part
+
+# Consts for user deck
+USERS_TO_ADD = 8
+
+@api.route('get_user_deck')
+def get_user_deck():
+    new_users = User.query.order_by(func.random()).limit(USERS_TO_ADD).all()
+    return render_template("users_as_list_items.html", users=new_users)

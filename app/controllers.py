@@ -7,7 +7,7 @@ STATIC_DIR = "static"
 IMAGE_DIR = "static/img"
 
 # display constants
-EXPLORE_COUNT = 5
+INITIAL_EXPLORE_COUNT = 16
 
 controllers = Blueprint('controllers', __name__, template_folder="views")
 
@@ -29,7 +29,7 @@ def home():
 
 @controllers.route('/explore')
 def explore():
-    explore_users = User.query.order_by(func.random()).limit(EXPLORE_COUNT).all()
+    explore_users = User.query.order_by(func.random()).limit(INITIAL_EXPLORE_COUNT).all()
     return render_template("explore.html", users=explore_users)
 
 @controllers.route('/user/<int:uid>')
