@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <center>
+        <h1>
+            {{user.name}}
+        </h1>
+        <br/>
+        <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
+        <br/>
+        <h5>
+            Details:
+        </h5>
+        <p>
+            {% if user.is_private %}
+                {{user.name}} is a private user, so DNA is not shown.
+            {% else %}
+                DNA: {{user.dna}}
+            {% endif %}
+        </p>
+        <p>
+            {% if user.location %}
+                {{user.name}} is from {{user.location}}.
+            {% endif %}
+        </p>
+        <p>
+            {% if user.job %}
+                {{user.name}} works as a {{user.job}}.
+            {% endif %}
+        </p>
+        </div>
+    </center>
+
+{% endblock %}

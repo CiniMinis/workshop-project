@@ -1,4 +1,4 @@
-from flask import send_from_directory, render_template, Blueprint
+from flask import send_from_directory, render_template, Blueprint, abort
 from app.models import User
 
 # directory constants
@@ -30,6 +30,13 @@ def home():
 def explore():
     explore_users = User.query.limit(EXPLORE_COUNT).all()
     return render_template("explore.html", users=explore_users)
+
+@controllers.route('/user/<int:uid>')
+def show_user(uid):
+    user = User.query.filter_by(user_id=uid).first()
+    if user is None:
+        abort(404)
+    return render_template("profile.html", user=user)
 
 
 @controllers.route('/draw')
