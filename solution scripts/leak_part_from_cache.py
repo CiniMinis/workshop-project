@@ -8,7 +8,7 @@ import requests
 
 # Server constants
 SESSION_COOKIE = "session"
-SERVER_URL = "http://localhost:5000"
+SERVER_URL = "http://127.0.0.1:5000"
 MAX_CACHE_SIZE = 10
 BITS_IN_NUCLEOTIDE = 2
 BITS_TO_NUCLEOTIDE = {
@@ -110,6 +110,9 @@ def cache_attack_part(part):
         
 if __name__ == '__main__':
     start = time.time()
-    result = cache_attack_part('head')
+    result = ""
+    for part in PART_ORDER:
+        result += cache_attack_part(part)
+    dna = bitstring_to_dna(result)
     end = time.time()
-    print(f"Found {result} in {end - start} seconds.")
+    print(f"Found {dna} in {end - start} seconds.")

@@ -27,7 +27,7 @@ function recolor_image(new_color, img) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // return a new image promise for the recolored image
-    return fetch_image(canvas.toDataURL("image/png"));
+    return canvas;
 }
 
 function draw_promise(context, img) {
@@ -99,29 +99,44 @@ function fetch_part_from_user(user_id, part) {
     });
 }
 
+function canvas_from_json(part_json) {
+    return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = AVATAR_WIDTH;
+        canvas.height = AVATAR_HEIGHT;
+        const ctx = canvas.getContext('2d');
+        draw_json_part(ctx, part_json)
+            .then(() => {
+                resolve(canvas);
+            });
+    });
+}
+
 function draw_user(canvas, user_id){
     var ctx = canvas.getContext('2d');
     var json_parts = AVATAR_BODY_PARTS.map(fetch_part_from_user.bind(undefined, user_id));
-    last_promise = clearCanvas(canvas);
+    var promises = [];
     for (let i = 0; i < json_parts.length; i++) {
-        last_promise = Promise.all([json_parts[i], last_promise])
-            .then((vals) => {
-                return draw_json_part(ctx, vals[0]);
-            });
+        promises.push(json_parts[i].then(canvas_from_json));
     }
-    last_promise.catch((err) => {draw_private_avatar(ctx)});
+    Promise.all(promises)
+        .then((body_parts) => {
+            body_parts.forEach((part) => {
+                ctx.drawImage(part, 0, 0);
+            });
+        })
+        .catch((err) => {draw_private_avatar(ctx)});
 }
 
+function prepare_avatar(avatar) {
+    avatar.width = AVATAR_WIDTH;
+    avatar.height = AVATAR_HEIGHT;
+    if (!avatar.hasAttribute("data-user-id"))
+        return;
+    user_id = avatar.getAttribute("data-user-id");
+    draw_user(avatar, user_id);
+}
 
 $().ready(() => {
-    // set avatars to correct size
-    $(".avatar")
-        .each((i, avatar) => {
-            avatar.width = AVATAR_WIDTH;
-            avatar.height = AVATAR_HEIGHT;
-        }).filter("[data-user-id]")
-        .each((i, avatar) => {
-            user_id = avatar.getAttribute("data-user-id");
-            draw_user(avatar, user_id)
-        });
+    $(".avatar").map((i, avatar) => {prepare_avatar(avatar)});
 });
