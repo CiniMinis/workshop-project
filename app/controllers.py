@@ -1,4 +1,5 @@
 from flask import send_from_directory, render_template, Blueprint, abort
+from sqlalchemy.sql.expression import func
 from app.models import User
 
 # directory constants
@@ -28,7 +29,7 @@ def home():
 
 @controllers.route('/explore')
 def explore():
-    explore_users = User.query.limit(EXPLORE_COUNT).all()
+    explore_users = User.query.order_by(func.random()).limit(EXPLORE_COUNT).all()
     return render_template("explore.html", users=explore_users)
 
 @controllers.route('/user/<int:uid>')
