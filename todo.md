@@ -15,6 +15,6 @@
 - [ ] Parallelize and improve performance of attack script
 - [ ] Maybe clean-up the async vs. sync logic in make_json_api.
 - [ ] Allow cached functions to return any object
-- [ ] Rename title in base template
+- [x] Rename title in base template
 - [ ] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [ ] Make proper documentation for everything!!!

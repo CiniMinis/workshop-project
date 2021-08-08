@@ -1,0 +1,48 @@
+<!-- Navbar snippet -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+
+        <!-- Brand -->
+        <a href="#" class="navbar-brand">
+            Genetwork
+        </a>
+
+        <!-- Search bar -->
+        <form class="me-auto d-flex">
+            <input type="search" class="form-control" placeholder="Search for users" />
+            <button type="submit" class="btn btn-outline-light ms-2"> Seach </button>
+        </form>
+
+        <!-- Page navigation links-->
+        <div class="p-2 collapse show collapse-horizontal" id="navbarPagesList">
+            <div class="d-flex flex-row navbar-nav">
+                <a href="/" class="p-2 nav-link text-nowrap">Homepage</a>
+                <a href="/explore" class="p-2 nav-link text-nowrap">Explore</a>
+                <a href="/draw" class="p-2 nav-link text-nowrap">Draw DNA</a>
+            </div>
+        </div>
+
+        <!-- Toggle page selection -->
+        <div class="p-1 flex-shrink-1">
+            <button type="button" class="navbar-toggler" id="navbarPagesToggler" data-bs-toggle="collapse"
+                data-bs-target="#navbarPagesList">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // changes icon of navbar toggler on toggle
+    $().ready(() => {
+        // make icon be retract
+        $('#navbarPagesList').on('show.bs.collapse', () => {
+            $('#navbarPagesToggler > i').addClass("bi-chevron-right").removeClass("bi-chevron-left");
+        });
+
+        // make icon be extend
+        $('#navbarPagesList').on('hide.bs.collapse', () => {
+            $('#navbarPagesToggler > i').addClass("bi-chevron-left").removeClass("bi-chevron-right");
+        });
+    });
+</script>
