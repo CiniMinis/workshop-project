@@ -1,0 +1,84 @@
+{% block sidebar %}
+<div class="container p-2 d-flex flex-column justify-content-center text-center">
+    <p>
+        <button type="button" class="btn btn-dark" id="sidebarSearchSettingsToggler" data-bs-toggle="collapse"
+            data-bs-target="#sidebarSearchSettings">
+            <i class="bi bi-chevron-down"> Search Settings</i>
+        </button>
+    </p>
+    <div class="container bg-light border-dark text-dark border rounded">
+        <div class="collapse" id="sidebarSearchSettings">
+            PUT
+            <br/>
+            SEARCH
+            <br/>
+            SETTINGS
+            <br/>
+            HERE
+        </div>
+    </div>
+    <br/>
+    <div class="container bg-light border-dark text-dark border rounded">
+        <p>
+            <b>
+                Use local storage to save recently viewed profiles, and display them here.
+            </b>
+        </p>
+    </div>
+    <br/>
+    <div class="container bg-light border-dark text-dark border rounded">
+        <p>
+            Maybe put a footer on the sidebar?
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block sidebar_internal_script %}
+<script>
+    $().ready(() => {
+        bind_button_to_collapse("sidebarSearchSettingsToggler", "sidebarSearchSettings");
+    });
+</script>
+{% endblock %}
+
+
+{% macro add_sidebar(sidebar_col_size=2) -%}
+<div class="container-fluid" id="contentContainer">
+    <div class="row">
+        <!-- Sidebar Col -->
+        <div class="col-{{sidebar_col_size}} bg-primary text-light" id="sidebar">
+            {{ self.sidebar() }}
+        </div>
+        <!-- Content Col -->
+        <div class="col">
+            {{ caller() }}
+        </div>
+    </div>
+</div>
+
+
+{{ self.sidebar_internal_script() }}
+
+
+<!-- Script to make sidebar fill window height  -->
+<script>
+    function stretch_sidebar() {
+        let window_height = $(window).height();
+        let content_offset = $("#contentContainer").offset().top;
+        let content_height = $("#contentContainer").height()
+        $("#sidebar").height(Math.max(window_height - content_offset, content_height));
+    }
+
+    // initial fit
+    stretch_sidebar();
+
+    // window change
+    window.onresize = stretch_sidebar;
+
+    // content addition
+    new ResizeObserver(stretch_sidebar).observe(contentContainer);
+</script>
+
+{%- endmacro %}

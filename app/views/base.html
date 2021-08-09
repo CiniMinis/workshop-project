@@ -20,9 +20,11 @@
     <script src='/static/main.js'></script>
     
     {% include "snippets/navbar.html" %}
-    
-    {% block content%}
+    {% from "snippets/sidebar.html" import add_sidebar %}
 
-    {% endblock %}
+    {% call add_sidebar() %}
+      {% block content required %}
+      {% endblock %}
+    {% endcall %}
   </body>
 </html>
