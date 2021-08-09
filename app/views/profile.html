@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-
+    <script src='/static/recent_users.js'></script>
+    <script>
+        add_user_to_recents({{user.user_id}}, "{{user.name}}");
+    </script>
     <center>
         <h1>
             {{user.name}}

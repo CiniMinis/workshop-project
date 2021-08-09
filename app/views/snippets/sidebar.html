@@ -21,8 +21,11 @@
     <div class="container bg-light border-dark text-dark border rounded">
         <p>
             <b>
-                Use local storage to save recently viewed profiles, and display them here.
+                Recently Viewed Users:
             </b>
+            <p id="sidebarRecentUsers">
+
+            </p>
         </p>
     </div>
     <br/>
@@ -36,9 +39,23 @@
 
 
 {% block sidebar_internal_script %}
+<script src='/static/recent_users.js'></script>
 <script>
     $().ready(() => {
+        // configure buttons
         bind_button_to_collapse("sidebarSearchSettingsToggler", "sidebarSearchSettings");
+
+        // add the recently viewed users to the sidebar
+        let recent_users = get_recent_users();
+        for (let i = 0; i < recent_users.length; i++) {
+            [user_id, name] = recent_users[i];
+            $("#sidebarRecentUsers").append(`
+                <canvas class="avatar avatar-small border border-primary" data-user-id='${user_id}'></canvas>
+                <a href="/user/${user_id}">${name}</a>
+                <br/>
+            `);
+        }
+        draw_all_avatars();
     });
 </script>
 {% endblock %}
