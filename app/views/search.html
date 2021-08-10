@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <center>
+        <h1>
+            Found {{users | length}} Matches:
+        </h1>
+        <br/>
+        <div class="container w-75">
+            <ul class="list-group list-group-horizontal align-items-stretch flex-wrap">
+                {% include "snippets/users_as_list_items.html" %}
+            </ul>
+        </div>
+    </center>
+
+{% endblock %}

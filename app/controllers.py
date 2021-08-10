@@ -1,4 +1,4 @@
-from flask import send_from_directory, render_template, Blueprint, abort
+from flask import send_from_directory, render_template, Blueprint, abort, request
 from sqlalchemy.sql.expression import func
 from app.models import User
 
@@ -22,9 +22,29 @@ def static_files(path):
     return send_from_directory(STATIC_DIR, path)
 
 
-@controllers.route('/')
+@controllers.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template("index.html")
+    if request.method == 'GET':
+        return render_template("index.html")
+    
+    # get initial search matches
+    search_term = request.form.get('search')
+    query = User.query.filter(User.name.like(f"%{search_term}%"))
+
+    # enforce privacy select
+    privacy_select = request.form.get('privacySelect')
+    if privacy_select == "private":
+        query = query.filter_by(is_private=True)
+    elif privacy_select == "public":
+        query = query.filter_by(is_private=False)
+
+    # enforce specified values
+    if 'forceJob' in request.form:
+        query = query.filter(User.job.isnot(None))
+    if 'forceLocation' in request.form:
+        query = query.filter(User.location.isnot(None))
+
+    return render_template("search.html", users=query.all())
 
 
 @controllers.route('/explore')

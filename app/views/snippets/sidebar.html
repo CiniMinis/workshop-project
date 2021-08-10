@@ -7,28 +7,34 @@
         </button>
     </p>
     <div class="container bg-light border-dark text-dark border rounded">
-        <div class="collapse" id="sidebarSearchSettings">
-            PUT
-            <br/>
-            SEARCH
-            <br/>
-            SETTINGS
-            <br/>
-            HERE
+        <div class="collapse mt-2" id="sidebarSearchSettings">
+            <select class="form-select" form="searchForm" name="privacySelect">
+                <option value="all" selected>Show public and private users</option>
+                <option value="public">Show only public users</option>
+                <option value="private">Show only private users</option>
+            </select>
+            <div class="form-check form-switch m-2">
+                <input class="form-check-input" type="checkbox" id="switchForceJob" form="searchForm" name="forceJob">
+                <label class="form-check-label" for="switchForceJob">User must specify a job</label>
+            </div>
+            <div class="form-check form-switch m-2">
+                <input class="form-check-input" type="checkbox" id="switchForceLocation" form="searchForm" name="forceLocation">
+                <label class="form-check-label" for="switchForceLocation">User must specify a location</label>
+            </div>
         </div>
     </div>
-    <br/>
+    <br />
     <div class="container bg-light border-dark text-dark border rounded">
         <p>
             <b>
                 Recently Viewed Users:
             </b>
-            <p id="sidebarRecentUsers">
+        <p id="sidebarRecentUsers">
 
-            </p>
+        </p>
         </p>
     </div>
-    <br/>
+    <br />
     <div class="container bg-light border-dark text-dark border rounded">
         <p>
             Maybe put a footer on the sidebar?
@@ -61,7 +67,7 @@
 {% endblock %}
 
 
-{% macro add_sidebar(sidebar_col_size=2) -%}
+{% macro add_sidebar(sidebar_col_size=3) -%}
 <div class="container-fluid" id="contentContainer">
     <div class="row">
         <!-- Sidebar Col -->
