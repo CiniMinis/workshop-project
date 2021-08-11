@@ -52,7 +52,7 @@ function draw_json_part(context, json) {
         if (!!json['color_image']) {
             promises.push(
                 fetch_image(json['color_image']['image'])
-                    .then(recolor_image.bind(undefined, json['color_image']['rgb']))
+                    .then(recolor_image.bind(undefined, json['color_image']['color']))
                     .then(draw_promise.bind(undefined, context))
             );
         }
