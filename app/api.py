@@ -1,6 +1,6 @@
 from app.models import User
 from flask import jsonify, request, Blueprint, render_template
-from app.modules.user_cache import AesLRUSessionCache, LRUSessionCache
+from app.modules.user_cache import SqlLRUSessionCache
 from app.config.avatar import Avatar
 from functools import wraps
 from sqlalchemy.sql.expression import func
@@ -48,7 +48,7 @@ def make_json_api(*args, **kwargs):
     return decorator
 
 
-@LRUSessionCache(max_size=10)
+@SqlLRUSessionCache()
 def part_to_dict(part):
     part_name = part.__class__.__name__.lower()
     part_path = PART_URL_TEMPLATE.format(part_name)

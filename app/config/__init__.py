@@ -1,6 +1,5 @@
 import os
 from abc import ABC, abstractmethod
-from flask_sessionstore import Session
 from instance import session_key
 
 FILE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -36,7 +35,7 @@ class AppTestConfig(AppConfig):
 # configuration for default flask sessions
 class SessionConfig:
     SECRET_KEY = session_key
-    SESSION_USE_SIGNER = True   # for sessionstore child classes
+    SESSION_USE_SIGNER = True
 
     def init_session(self, app):
         pass
@@ -46,8 +45,8 @@ class SQLSessionConfig(SessionConfig):
     SESSION_TYPE = 'sqlalchemy'
 
     def init_session(self, app):
-        session = Session(app)
-        session.app.session_interface.db.create_all()
+        from app.modules.user_cache import SqlLRUSessionCache
+        SqlLRUSessionCache.init_app(app)
 
 class AppConfigFactory:
     DEV_CONFIG_NAMES = ['dev', 'development']  # names for development
