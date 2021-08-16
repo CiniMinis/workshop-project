@@ -3,7 +3,7 @@ from math import log2, ceil
 from abc import abstractmethod, ABC
 from functools import reduce
 from random import randint, choice
-from app.modules.colors import COLOR_NAMES
+from utils.colors import COLOR_NAMES
 
 """ Enum for encoding the base units of DNA """
 DNANucleotide = Enum('DNANucleotide', 'C G A T', start=0)
