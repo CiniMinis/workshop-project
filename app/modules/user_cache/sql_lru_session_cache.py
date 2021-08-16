@@ -128,7 +128,7 @@ class SqlLRUSessionCache(LRUSessionCache):
         try:
             db.session.commit()
         except (StaleDataError, IntegrityError):
-            # record was evicted! Retry to store.
+            # record was modified while operating! Retry to store.
             db.session.rollback()
             self._store(key, value)
     
