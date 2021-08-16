@@ -8,8 +8,12 @@ from flask.sessions import session_json_serializer
 
 s = URLSafeTimedSerializer("random-key-which-is-wrong", serializer=session_json_serializer)
 
-cookie = ".eJyrVkpOTM5IjU_LL4pPTy2JL05NLkotUbKqVtJQd61MLVbX0QRxFIBC0YZmRuYWhuYWFiZ6JgbGFqbmRjpQGQMYw8jQQMfIxEjH1DS2FgR1gMbk5Rengo2BGWBpYKpnamBkbgrTZaiTV5qTA1JfCwCvhyf9.YQaHsQ.D6ZvcO16FSM3BIgUXNXLj0UUOjQ"
+cookie = input("Cookie to decode: ")
 
+# using unsafe to ignore the signing mismatch
 _, payload = s.loads_unsafe(cookie)
 
-print(payload)
+if payload is None:
+    print("Bad decoding")
+else:
+    print(payload)
