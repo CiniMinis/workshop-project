@@ -8,7 +8,8 @@
 - [x] Make prototype of challenge - I finished all essential logic!!!
 - [x] Write working solution - POC SOLUTION WORKS FOR LEAKING PARTS!!!
 - [x] Make challenges per user change each time
-- [ ] Add success checking for the user. Should reset the the challenge after the check.
+- [x] Add success checking for the user. Should reset the the challenge after a failed check.
+- [ ] Make working solution for SQLSessions!
 - [ ] Create cosmetics/story for website
 - [ ] Make configurations for production and testing
 - [ ] Playtests!

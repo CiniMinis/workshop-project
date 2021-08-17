@@ -97,20 +97,19 @@ class Villain(db.Model):
     _USER_FACTORY = UserFactory(Avatar)
     _DNA_RANDOMIZER = lambda: UserFactory.randomizers['dna'](Villain._USER_FACTORY)
 
-    def _shapeshift(self):
+    def shapeshift(self):
         self.dna = Villain._DNA_RANDOMIZER()
         self.detections = 0
+        db.session.commit()
 
     def notify_detection(self):
         self.detections = Villain.__table__.columns.detections + 1  # atomic inc
         cur_detections = Villain.query.filter(Villain.ssid==self.ssid).first().detections
-        db.session.flush()  # refresh data against db for accurate cur_detections
+        db.session.commit()  # refresh data against db for accurate cur_detections
         if cur_detections == self.MAX_DETECTIONS or \
             self.detections > self.MAX_DETECTIONS + self._EMERGENCY_OVER:   # failsafe
 
-            self._shapeshift()
-        
-        db.session.commit()
+            self.shapeshift()
     
     @staticmethod
     def is_villain(user):

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <center>
+        <h1>
+            Check Challenge
+        </h1>
+        <br/>
+        {% if win is defined %}
+            {% if win %}
+                <div class="alert alert-success" role="alert">
+                    {{message}}
+                </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    Incorrect attempt!
+                    <br/>
+                    Our sources claim the villain noticed your attempt and shapeshifted away! 
+                </div>
+            {% endif %}
+            <br/>
+        {% endif %}
+        <form id="challengeForm" method='post'>
+            <input type="text" class="form-control" placeholder="Villain DNA..." name="dna" size=40/>
+            <br/>
+            <button type="submit" class="btn btn-dark m-2"> Check </button>
+        </form>
+    </center>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 from flask import send_from_directory, render_template, Blueprint, abort, request
 from sqlalchemy.sql.expression import func
-from app.models import SessionUsers
+from app.models import SessionUsers, Villain
+from instance import FLAG
 
 # directory constants
 STATIC_DIR = "static"
@@ -63,3 +64,16 @@ def show_user(uid):
 @controllers.route('/draw')
 def draw_page():
     return render_template("draw.html")
+
+@controllers.route('/check_challenge', methods=['GET', 'POST'])
+def check_villain_dna():
+    if request.method == 'GET':
+        return render_template("check_challenge.html")
+    
+    submitted_dna = request.form.get('dna')
+    session_villain = Villain.get_session_villain()
+    if session_villain.dna == submitted_dna:
+        return render_template("check_challenge.html", win=True, message="The Flag Is: {}".format(FLAG))
+    else:
+        session_villain.shapeshift()
+        return render_template("check_challenge.html", win=False)
