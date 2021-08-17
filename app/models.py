@@ -1,5 +1,8 @@
+from sqlalchemy import literal
+from app.config.avatar import Avatar
 from app import db
 from faker import Faker
+from .modules.ssid_manager import SessionIdManager
 import random
 
 def choose_with_prob(cand1, cand2, prob1):
@@ -10,6 +13,7 @@ def choose_with_prob(cand1, cand2, prob1):
     return random.choices((cand1, cand2), choice_weights)[0]
 
 class User(db.Model):
+    __tablename__ = 'users'
     # internal user id for database
     user_id = db.Column(db.Integer, primary_key=True)
     # dna sequence string
@@ -17,7 +21,7 @@ class User(db.Model):
     # are the avatar picture and dna sequence viewable
     is_private = db.Column(db.Boolean, nullable=False, default=False)
     # cosmetic display data for profile
-    name = db.Column(db.Text, nullable=False, unique=True)
+    name = db.Column(db.Text, nullable=False)
     job = db.Column(db.Text)
     location = db.Column(db.Text)
 
@@ -64,3 +68,73 @@ class UserFactory:
     def randomize(self):
         random_vals = {key: rand(self) for key, rand in self.randomizers.items()}
         return User(**random_vals)
+
+
+class Villain(db.Model):
+    __tablename__ = 'villains'
+    MAX_QUERIES = 5
+
+    # ssid of user to which the villain belongs
+    ssid = db.Column(db.String(SessionIdManager.UUID_LEN), primary_key=True, nullable=False)
+    # dna for villain
+    dna = db.Column(db.Text, nullable=False)
+
+    # Properties which aren't real columns
+    # These make the villain match the usual user columns
+    FAKE_COLS = {
+        'user_id': 666,
+        'is_private': True,
+        'name': "Raven Darkhölme",
+        'location': "Earth-616",
+        'job': None
+    }
+
+    _USER_FACTORY = UserFactory(Avatar)
+    _DNA_RANDOMIZER = lambda: UserFactory.randomizers['dna'](Villain._USER_FACTORY)
+
+    @classmethod
+    def get_user_columns(cls):
+        user_col_names = [col.key for col in User.__table__.columns]
+        fake_columns = []
+        for col_name in user_col_names:
+            if col_name in cls.FAKE_COLS:
+                fake_columns.append(literal(cls.FAKE_COLS[col_name]).label(col_name))
+            else:
+                fake_columns.append(getattr(cls, col_name))
+        return fake_columns
+
+    @staticmethod
+    @SessionIdManager.call_on_new
+    def _make_villain(new_ssid):
+        db.session.add(
+            Villain(
+                ssid=new_ssid,
+                dna=Villain._DNA_RANDOMIZER(),
+            )
+        )
+        db.session.commit()
+
+class FakeQueryMeta(type):
+    FAKE_QUERY_FUNC_NAME = "fake_query"
+
+    @property
+    def query(cls):
+        query_func = getattr(cls, cls.FAKE_QUERY_FUNC_NAME, None)
+        if callable(query_func):
+            return query_func()
+        else:
+            raise TypeError("query function not defined")
+
+
+class SessionUsers(metaclass=FakeQueryMeta):
+    _SSID_MANAGER = SessionIdManager()
+
+    @classmethod
+    def fake_query(cls):
+        static_users = User.query
+        try:
+            ssid = cls._SSID_MANAGER.current_ssid
+            relevant_villains = db.session.query(*Villain.get_user_columns()).filter(Villain.ssid==ssid)
+            return relevant_villains.union(static_users)
+        except ValueError:
+            return static_users

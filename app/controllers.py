@@ -1,6 +1,6 @@
 from flask import send_from_directory, render_template, Blueprint, abort, request
 from sqlalchemy.sql.expression import func
-from app.models import User
+from app.models import SessionUsers, User
 
 # directory constants
 STATIC_DIR = "static"
@@ -29,7 +29,7 @@ def home():
     
     # get initial search matches
     search_term = request.form.get('search')
-    query = User.query.filter(User.name.like(f"%{search_term}%"))
+    query = SessionUsers.query.filter(User.name.like(f"%{search_term}%"))
 
     # enforce privacy select
     privacy_select = request.form.get('privacySelect')
@@ -40,21 +40,21 @@ def home():
 
     # enforce specified values
     if 'forceJob' in request.form:
-        query = query.filter(User.job.isnot(None))
+        query = query.filter(SessionUsers.job.isnot(None))
     if 'forceLocation' in request.form:
-        query = query.filter(User.location.isnot(None))
+        query = query.filter(SessionUsers.location.isnot(None))
 
     return render_template("search.html", users=query.all())
 
 
 @controllers.route('/explore')
 def explore():
-    explore_users = User.query.order_by(func.random()).limit(INITIAL_EXPLORE_COUNT).all()
+    explore_users = SessionUsers.query.order_by(func.random()).limit(INITIAL_EXPLORE_COUNT).all()
     return render_template("explore.html", users=explore_users)
 
 @controllers.route('/user/<int:uid>')
 def show_user(uid):
-    user = User.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter_by(user_id=uid).first()
     if user is None:
         abort(404)
     return render_template("profile.html", user=user)

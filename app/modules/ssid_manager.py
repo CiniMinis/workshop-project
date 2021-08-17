@@ -6,11 +6,15 @@ class SessionIdManager(metaclass=Singleton):
     CLIENT_ID_FIELD = "SessionId"  
     UUID_LEN = 36
     _INITIALIZED_APPS = []
+    _CREATION_HANDLERS = []
 
     @staticmethod
     def _init_ssid(response):
         if SessionIdManager.CLIENT_ID_FIELD not in session:
-            session[SessionIdManager.CLIENT_ID_FIELD] = str(uuid4())
+            new_ssid = str(uuid4())
+            session[SessionIdManager.CLIENT_ID_FIELD] = new_ssid
+            for handler in SessionIdManager._CREATION_HANDLERS:
+                handler(new_ssid)
         
         return response
     
@@ -31,3 +35,8 @@ class SessionIdManager(metaclass=Singleton):
         ssid = session[self.CLIENT_ID_FIELD]
 
         return ssid
+    
+    @staticmethod
+    def call_on_new(func):
+        SessionIdManager._CREATION_HANDLERS.append(func)
+        return func

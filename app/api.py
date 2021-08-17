@@ -1,4 +1,4 @@
-from app.models import User
+from app.models import SessionUsers
 from flask import jsonify, request, Blueprint, render_template
 from app.modules.user_cache import SqlLRUSessionCache
 from app.config.avatar import Avatar
@@ -34,7 +34,7 @@ def make_json_api(*args, **kwargs):
             except Exception as e:
                 resp['status'] = 'fail'
                 resp['content'] = str(e)
-            
+                print(resp)
             return jsonify(**resp)
         
         if asyncio.iscoroutinefunction(func):
@@ -81,7 +81,7 @@ def part_from_dna():
 
 
 async def fetch_part_from_user(uid, part_name):
-    user = User.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter_by(user_id=uid).first()
     if user is None:
         raise ValueError("User id not found")
     avatar = Avatar.from_dna(user.dna)
@@ -89,7 +89,7 @@ async def fetch_part_from_user(uid, part_name):
 
 
 async def is_user_visible(uid):
-    user = User.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter_by(user_id=uid).first()
     if not user.is_private:
         return True
     # TODO: Implement friend check to show avatar to friends
@@ -102,7 +102,7 @@ async def part_from_user():
         raise ValueError("Missing user id parameter")
     if 'part' not in request.form:
         raise ValueError("Missing part parameter")
-    user_id = request.form['id']
+    user_id = int(request.form['id'])
     part_name = request.form['part']
     is_visible, part = await asyncio.gather(
         is_user_visible(user_id),
@@ -118,5 +118,5 @@ USERS_TO_ADD = 8
 
 @api.route('get_user_deck')
 def get_user_deck():
-    new_users = User.query.order_by(func.random()).limit(USERS_TO_ADD).all()
+    new_users = SessionUsers.query.order_by(func.random()).limit(USERS_TO_ADD).all()
     return render_template("users_as_list_items.html", users=new_users)
