@@ -72,10 +72,15 @@ class UserFactory:
 
 class Villain(db.Model):
     __tablename__ = 'villains'
-    MAX_QUERIES = 5
+
+    _SSID_MANAGER = SessionIdManager()
+    MAX_DETECTIONS = 2048
+    _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs
-    ssid = db.Column(db.String(SessionIdManager.UUID_LEN), primary_key=True, nullable=False)
+    ssid = db.Column(db.String(_SSID_MANAGER.UUID_LEN), primary_key=True, nullable=False)
+    # tracks the number queries to protected columns
+    detections = db.Column(db.Integer, nullable=False, default=0)
     # dna for villain
     dna = db.Column(db.Text, nullable=False)
 
@@ -91,6 +96,35 @@ class Villain(db.Model):
 
     _USER_FACTORY = UserFactory(Avatar)
     _DNA_RANDOMIZER = lambda: UserFactory.randomizers['dna'](Villain._USER_FACTORY)
+
+    def _shapeshift(self):
+        self.dna = Villain._DNA_RANDOMIZER()
+        self.detections = 0
+
+    def notify_detection(self):
+        self.detections = Villain.__table__.columns.detections + 1  # atomic inc
+        cur_detections = Villain.query.filter(Villain.ssid==self.ssid).first().detections
+        db.session.flush()  # refresh data against db for accurate cur_detections
+        if cur_detections == self.MAX_DETECTIONS or \
+            self.detections > self.MAX_DETECTIONS + self._EMERGENCY_OVER:   # failsafe
+
+            self._shapeshift()
+        
+        db.session.commit()
+    
+    @staticmethod
+    def is_villain(user):
+        for col, fake_val in Villain.FAKE_COLS.items():
+            if not hasattr(user, col):
+                return False
+            if getattr(user, col) != fake_val:
+                return False
+        return True
+
+    @staticmethod
+    def get_session_villain():
+        cur_ssid = Villain._SSID_MANAGER.current_ssid
+        return Villain.query.filter_by(ssid=cur_ssid).first()
 
     @classmethod
     def get_user_columns(cls):

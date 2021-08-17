@@ -1,4 +1,4 @@
-from app.models import SessionUsers
+from app.models import SessionUsers, Villain
 from flask import jsonify, request, Blueprint, render_template
 from app.modules.user_cache import SqlLRUSessionCache
 from app.config.avatar import Avatar
@@ -34,7 +34,7 @@ def make_json_api(*args, **kwargs):
             except Exception as e:
                 resp['status'] = 'fail'
                 resp['content'] = str(e)
-                print(resp)
+            
             return jsonify(**resp)
         
         if asyncio.iscoroutinefunction(func):
@@ -90,6 +90,9 @@ async def fetch_part_from_user(uid, part_name):
 
 async def is_user_visible(uid):
     user = SessionUsers.query.filter_by(user_id=uid).first()
+    if Villain.is_villain(user):
+        villain = Villain.get_session_villain()
+        villain.notify_detection()
     if not user.is_private:
         return True
     # TODO: Implement friend check to show avatar to friends
