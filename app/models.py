@@ -129,6 +129,15 @@ class FakeQueryMeta(type):
 class SessionUsers(metaclass=FakeQueryMeta):
     _SSID_MANAGER = SessionIdManager()
 
+    # References to the User columns
+    # allows column access via this class instead of User
+    name = User.name
+    user_id = User.user_id
+    dna = User.dna
+    job = User.job
+    location = User.location
+    is_private = User.is_private
+
     @classmethod
     def fake_query(cls):
         static_users = User.query

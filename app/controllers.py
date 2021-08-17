@@ -1,6 +1,6 @@
 from flask import send_from_directory, render_template, Blueprint, abort, request
 from sqlalchemy.sql.expression import func
-from app.models import SessionUsers, User
+from app.models import SessionUsers
 
 # directory constants
 STATIC_DIR = "static"
@@ -29,7 +29,7 @@ def home():
     
     # get initial search matches
     search_term = request.form.get('search')
-    query = SessionUsers.query.filter(User.name.like(f"%{search_term}%"))
+    query = SessionUsers.query.filter(SessionUsers.name.like(f"%{search_term}%"))
 
     # enforce privacy select
     privacy_select = request.form.get('privacySelect')
