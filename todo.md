@@ -7,6 +7,7 @@
 - [x] Create and populate user database
 - [x] Make prototype of challenge - I finished all essential logic!!!
 - [x] Write working solution - POC SOLUTION WORKS FOR LEAKING PARTS!!!
+- [ ] Make challenges per user and success checking
 - [ ] Create cosmetics/story for website
 - [ ] Make configurations for production and testing
 - [ ] Playtests!
