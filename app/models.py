@@ -74,7 +74,7 @@ class Villain(db.Model):
     __tablename__ = 'villains'
 
     _SSID_MANAGER = SessionIdManager()
-    MAX_DETECTIONS = 2048
+    MAX_DETECTIONS = 256
     _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs

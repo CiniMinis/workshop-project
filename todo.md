@@ -17,10 +17,11 @@
 # Mini-Tasks
 - ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)
 - [ ] Add cleanup for dead sessions?
-- [ ] Change villain's max queries to better fit the actual amount required in the attack.
+- [x] Change villain's max queries to better fit the actual amount required in the attack.
 - [ ] Put something in the README
 - [ ] Maybe clean-up the async vs. sync logic in make_json_api.
 - [ ] Allow cached functions to return any object
 - [x] Rename title in base template
-- [ ] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
+- [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [ ] Make proper documentation for everything!!!
+- [ ] Containerize for deployment?
