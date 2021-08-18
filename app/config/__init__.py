@@ -38,7 +38,8 @@ class SessionConfig:
     SESSION_USE_SIGNER = True
 
     def init_session(self, app):
-        pass
+        from app.modules.ssid_manager import SessionIdManager
+        SessionIdManager.init_app(app)
 
 # configuration for sqlalchemy flask session
 class SQLSessionConfig(SessionConfig):
