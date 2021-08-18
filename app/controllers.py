@@ -71,7 +71,11 @@ def check_villain_dna():
         return render_template("check_challenge.html")
     
     submitted_dna = request.form.get('dna')
+    if submitted_dna is not None:
+        submitted_dna = submitted_dna.strip()
+    
     session_villain = Villain.get_session_villain()
+    
     if session_villain.dna == submitted_dna:
         return render_template("check_challenge.html", win=True, message="The Flag Is: {}".format(FLAG))
     else:
