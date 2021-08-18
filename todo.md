@@ -9,13 +9,16 @@
 - [x] Write working solution - POC SOLUTION WORKS FOR LEAKING PARTS!!!
 - [x] Make challenges per user change each time
 - [x] Add success checking for the user. Should reset the the challenge after a failed check.
-- [ ] Make working solution for SQLSessions!
+- [x] Make working solution for SQLSessions!
 - [ ] Create cosmetics/story for website
-- [ ] Make configurations for production and testing
+- [ ] Make configurations for production ~~and testing~~
 - [ ] Playtests!
 
 # Mini-Tasks
-- [ ] Parallelize and improve performance of attack script
+- ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)
+- [ ] Add cleanup for dead sessions?
+- [ ] Change villain's max queries to better fit the actual amount required in the attack.
+- [ ] Put something in the README
 - [ ] Maybe clean-up the async vs. sync logic in make_json_api.
 - [ ] Allow cached functions to return any object
 - [x] Rename title in base template
