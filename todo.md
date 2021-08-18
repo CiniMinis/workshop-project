@@ -20,7 +20,7 @@
 - [x] Change villain's max queries to better fit the actual amount required in the attack.
 - [ ] Put something in the README
 - [ ] Maybe clean-up the async vs. sync logic in make_json_api.
-- [ ] Allow cached functions to return any object
+- [x] Allow cached functions to return any object
 - [x] Rename title in base template
 - [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [ ] Make proper documentation for everything!!!

@@ -58,7 +58,7 @@ def img_to_data_uri(image_url):
     encoded_img = base64.b64encode(img_bytes).decode('ascii')
     return f"data:image/{extention};base64,{encoded_img}"
 
-@SqlLRUSessionCache()
+@SqlLRUSessionCache(serializer=json)
 def part_to_dict(part):
     part_name = part.__class__.__name__.lower()
     part_path = PART_URL_TEMPLATE.format(part_name)
@@ -73,9 +73,7 @@ def part_to_dict(part):
     else:
         color_dict = None
     part_dict['color_image'] = color_dict
-    # return part_dict
-    # TODO: make me return normally!
-    return json.dumps(part_dict)
+    return part_dict
 
 
 @make_json_api('part_from_dna', methods=['POST'])
@@ -87,7 +85,7 @@ def part_from_dna():
     dna = request.form['dna']
     part_name = request.form['part']
     avatar = Avatar.from_dna(dna)
-    return json.loads(part_to_dict(avatar[part_name]))
+    return part_to_dict(avatar[part_name])
 
 
 async def fetch_part_from_user(uid, part_name):
@@ -95,7 +93,7 @@ async def fetch_part_from_user(uid, part_name):
     if user is None:
         raise ValueError("User id not found")
     avatar = Avatar.from_dna(user.dna)
-    return json.loads(part_to_dict(avatar[part_name]))
+    return part_to_dict(avatar[part_name])
 
 
 async def is_user_visible(uid):

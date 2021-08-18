@@ -8,11 +8,12 @@ class LRUSessionCache:
     CACHE_NAME_TEMPLATE = "cache_for_{}"
     DEFAULT_SIZE = 10
 
-    def __init__(self, max_size=None):
+    def __init__(self, max_size=None, serializer=None):
         if max_size is None:
             max_size = self.DEFAULT_SIZE
         
         self.max_size = max_size
+        self.serializer = serializer
 
     @property
     def _cache(self):
@@ -50,13 +51,21 @@ class LRUSessionCache:
             if fetched is not None:
                 _, result = fetched
                 self._store(parameters, result)
-                return result
+
+                if self.serializer is None:
+                    return result
+                return self.serializer.loads(result)
 
             result = func(*args, **kwargs)
+            if self.serializer is None:
+                to_store = result
+            else:
+                to_store = self.serializer.dumps(result)
+            
             if len(self._cache) >= self.max_size:
                 self._evict()
 
-            self._store(parameters, result)
+            self._store(parameters, to_store)
             return result
 
         return cached_func
