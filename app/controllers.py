@@ -26,7 +26,7 @@ def static_files(path):
 @controllers.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
-        return render_template("index.html")
+        return render_template("index.jinja")
     
     # get initial search matches
     search_term = request.form.get('search')
@@ -45,30 +45,30 @@ def home():
     if 'forceLocation' in request.form:
         query = query.filter(SessionUsers.location.isnot(None))
 
-    return render_template("search.html", users=query.all())
+    return render_template("search.jinja", users=query.all())
 
 
 @controllers.route('/explore')
 def explore():
     explore_users = SessionUsers.query.order_by(func.random()).limit(INITIAL_EXPLORE_COUNT).all()
-    return render_template("explore.html", users=explore_users)
+    return render_template("explore.jinja", users=explore_users)
 
 @controllers.route('/user/<int:uid>')
 def show_user(uid):
     user = SessionUsers.query.filter_by(user_id=uid).first()
     if user is None:
         abort(404)
-    return render_template("profile.html", user=user)
+    return render_template("profile.jinja", user=user)
 
 
 @controllers.route('/draw')
 def draw_page():
-    return render_template("draw.html")
+    return render_template("draw.jinja")
 
 @controllers.route('/check_challenge', methods=['GET', 'POST'])
 def check_villain_dna():
     if request.method == 'GET':
-        return render_template("check_challenge.html")
+        return render_template("check_challenge.jinja")
     
     submitted_dna = request.form.get('dna')
     if submitted_dna is not None:
@@ -77,7 +77,7 @@ def check_villain_dna():
     session_villain = Villain.get_session_villain()
     
     if session_villain.dna == submitted_dna:
-        return render_template("check_challenge.html", win=True, message="The Flag Is: {}".format(FLAG))
+        return render_template("check_challenge.jinja", win=True, message="The Flag Is: {}".format(FLAG))
     else:
         session_villain.shapeshift()
-        return render_template("check_challenge.html", win=False)
+        return render_template("check_challenge.jinja", win=False)

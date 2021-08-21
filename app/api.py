@@ -130,4 +130,4 @@ USERS_TO_ADD = 8
 @api.route('get_user_deck')
 def get_user_deck():
     new_users = SessionUsers.query.order_by(func.random()).limit(USERS_TO_ADD).all()
-    return render_template("users_as_list_items.html", users=new_users)
+    return render_template("users_as_list_items.jinja", users=new_users)

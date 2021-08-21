@@ -20,8 +20,8 @@
     <script src='/static/avatars.js'></script>
     <script src='/static/main.js'></script>
     
-    {% include "snippets/navbar.html" %}
-    {% from "snippets/sidebar.html" import add_sidebar %}
+    {% include "snippets/navbar.jinja" %}
+    {% from "snippets/sidebar.jinja" import add_sidebar %}
 
     {% call add_sidebar() %}
       {% block content required %}

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.jinja' %}
 
 {% set active_page = 'explore' %}
 
@@ -11,7 +11,7 @@
         <br/>
         <div class="container w-75">
             <ul class="list-group list-group-horizontal align-items-stretch flex-wrap" id="exploreUserList">
-                {% include "snippets/users_as_list_items.html" %}
+                {% include "snippets/users_as_list_items.jinja" %}
             </ul>
         </div>
     </center>
