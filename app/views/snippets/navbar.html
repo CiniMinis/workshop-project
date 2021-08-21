@@ -1,3 +1,10 @@
+{% set navbar_page_links = [
+    ('index', '/', 'Home'),
+    ('explore', '/explore', 'Explore'),
+    ('draw', '/draw', 'Draw DNA'),
+    ('check', '/check_challenge', 'Submit Solution')
+]-%}
+
 <!-- Navbar snippet -->
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
@@ -15,10 +22,9 @@
         <!-- Page navigation links-->
         <div class="p-2 collapse show collapse-horizontal" id="navbarPagesList" aria-expanded="true">
             <div class="d-flex flex-row navbar-nav">
-                <a href="/" class="p-2 nav-link text-nowrap">Homepage</a>
-                <a href="/explore" class="p-2 nav-link text-nowrap">Explore</a>
-                <a href="/draw" class="p-2 nav-link text-nowrap">Draw DNA</a>
-                <a href="/check_challenge" class="p-2 nav-link text-nowrap">Submit Solution</a>
+                {% for page, url, name in navbar_page_links %}
+                    <a href="{{url}}" class="p-2 nav-link text-nowrap {% if page == active_page %}active{% endif %}">{{name}}</a>
+                {% endfor %}
             </div>
         </div>
 
