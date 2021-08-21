@@ -1,43 +1,52 @@
 {% set navbar_page_links = [
-    ('index', '/', 'Home'),
-    ('explore', '/explore', 'Explore'),
-    ('draw', '/draw', 'Draw DNA'),
-    ('check', '/check_challenge', 'Submit Solution')
+    ('index', '/', 'Home', 'bi-house-fill'),
+    ('explore', '/explore', 'Explore Users', 'bi-people-fill'),
+    ('draw', '/draw', 'Draw DNA', 'bi-palette-fill'),
+    ('check', '/check_challenge', 'Submit Solution', 'bi-award-fill')
 ]-%}
 
 {% set active_page = active_page | default('index') %}
 
+{% macro nav_link(url, name, icon, is_active=False) -%}
+<a href="{{url}}"
+    class="p-2 nav-link text-nowrap {% if is_active %}active{% endif %} text-center">
+    <i class="bi {{icon}} d-block h4"></i>
+    {{name}}
+</a>
+{%- endmacro %}
+
 <!-- Navbar snippet -->
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <!-- Search bar -->
-        <form class="d-flex" id="searchForm" action='/' method='post'>
-            <input type="search" class="form-control" placeholder="Search for users" name="search"/>
-            <button type="submit" class="btn btn-outline-light m-2"> Search </button>
-        </form>
+<nav class="navbar navbar-dark bg-dark p-2">
+    <!-- Brand -->
+    <a href="#" class="navbar-brand p-4 me-4">
+        Genetwork
+    </a>
+    
+    <!-- Search bar -->
+    <form class="d-flex me-auto" id="searchForm" action='/' method='post'>
+        <input type="search" class="form-control" placeholder="Search for users" name="search" />
+        <button type="submit" class="btn btn-outline-light m-2">
+            Search
+        </button>
+    </form>
 
-        <!-- Brand -->
-        <a href="#" class="navbar-brand p-4 me-auto">
-            Genetwork
-        </a>
+    <!-- Toggle page selection -->
+    <div class="p-1 flex-shrink-1">
+        <button type="button" class="navbar-toggler" id="navbarPagesToggler" data-bs-toggle="collapse"
+            data-bs-target="#navbarPagesList">
+            <i class="bi h3"></i>
+        </button>
+    </div>
 
-        <!-- Page navigation links-->
-        <div class="p-2 collapse show collapse-horizontal" id="navbarPagesList" aria-expanded="true">
-            <div class="d-flex flex-row navbar-nav">
-                {% for page, url, name in navbar_page_links %}
-                    <a href="{{url}}" class="p-2 nav-link text-nowrap {% if page == active_page %}active{% endif %}">{{name}}</a>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Toggle page selection -->
-        <div class="p-1 flex-shrink-1">
-            <button type="button" class="navbar-toggler" id="navbarPagesToggler" data-bs-toggle="collapse"
-                data-bs-target="#navbarPagesList">
-                <i class="bi"></i>
-            </button>
+    <!-- Page navigation links-->
+    <div class="p-2 collapse show collapse-horizontal" id="navbarPagesList" aria-expanded="true">
+        <div class="d-flex flex-row navbar-nav">
+            {% for page, url, name, icon in navbar_page_links %}
+                {{nav_link(url, name, icon, page==active_page)}}
+            {% endfor %}
         </div>
     </div>
+
 </nav>
 
 <script src='/static/navbar.js'></script>

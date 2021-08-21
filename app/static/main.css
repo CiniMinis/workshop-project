@@ -15,3 +15,7 @@ canvas.avatar-big {
     width: 450px;
     height: 450px;
 }
+
+.navbar {
+    height: 100px;
+}
