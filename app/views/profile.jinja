@@ -1,5 +1,7 @@
 {% extends 'base.jinja' %}
 
+{% set active_page = user.name %}
+
 {% block content %}
     <script src='/static/recent_users.js'></script>
     <script>

@@ -5,6 +5,8 @@
     ('check', '/check_challenge', 'Submit Solution')
 ]-%}
 
+{% set active_page = active_page | default('index') %}
+
 <!-- Navbar snippet -->
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
