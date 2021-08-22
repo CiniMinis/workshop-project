@@ -1,8 +1,10 @@
 {% for user in users %}
-<a href="/user/{{user.user_id}}" class="border list-group-item list-group-item-action w-25 pb-0">
-    <h5>
-        {{user.name}}
-    </h5>
-    <canvas class="avatar" data-user-id='{{user.user_id}}'></canvas>
+<a href="/user/{{user.user_id}}" class="border list-group-item w-25 d-flex flex-column align-items-center border-0">
+    <canvas class="avatar p-0 m-0" data-user-id='{{user.user_id}}'></canvas>
+    <div class="container w-100 bg-dark text-light p-2 m-0">
+        <h5 class="w-100 bg-dark text-light p-0 m-0">
+            {{user.name}}
+        </h5>
+    </div>
 </a>
 {% endfor %}
