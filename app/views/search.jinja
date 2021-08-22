@@ -4,9 +4,15 @@
 
 {% block content %}
     <center>
-        <h1>
-            Found {{users | length}} Matches:
-        </h1>
+        <h2 class="display-2">
+            <small class="text-muted">Found</small> {{users | length}} <small class="text-muted">Matching 
+                {% if users | length == 1 %}
+                    User
+                {% else %}
+                    Users
+                {% endif %}
+            </small>
+        </h2>
         <br/>
         <div class="container w-75">
             <ul class="list-group list-group-horizontal align-items-stretch flex-wrap">
