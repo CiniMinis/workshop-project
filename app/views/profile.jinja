@@ -12,7 +12,7 @@
             <div class="col-5 offset-1 p-0 d-flex justify-content-center bg-warning border border-dark border-5 border-bottom-0">
                 <canvas class="avatar avatar-big align-self-end p-0" data-user-id='{{user.user_id}}'></canvas>
             </div>
-            <div class="col-auto d-flex bg-light">
+            <div class="col-6 d-flex bg-light">
                 <div class="container-fluid align-self-end m-0 p-0">
                     <h1 class="display-1">
                         {{user.name}}
@@ -30,7 +30,9 @@
         <div class="row bg-dark">
             <div class="col-5 offset-1 text-light">
                 <p class="h4">
-                    About:
+                    {% if user.location or user.job %}
+                        About:
+                    {% endif %}
                 </p>
                 {% if user.location %}
                     <p class="tab">
