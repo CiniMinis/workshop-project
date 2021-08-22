@@ -1,0 +1,47 @@
+body {
+    background-color: black;
+    color: lime;
+    font-size: large;
+    padding-top: 5em;
+    display: flex;
+    justify-content: center;
+}
+
+/* typewriter is based on css-tricks.com */
+.typewriter {
+    overflow: hidden;
+    border-right: .15em solid lime;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: .15em;
+    animation: 
+      typing 3.5s steps(40, end),
+      blink-caret .75s step-end infinite;
+}
+
+.l33t-btn, .l33t-btn:visited {
+    background-color: limegreen;
+}
+
+.l33t-btn:hover {
+    background-color: lime;
+}
+
+.appear{
+    opacity: 0;
+}
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: lime; }
+  }
+
+  #wrapper{
+    margin-left:auto;
+    margin-right:auto;
+}
