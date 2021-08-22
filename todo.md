@@ -16,6 +16,7 @@
 
 # Mini-Tasks
 - ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)
+- [ ] Adjust for smaller screens
 - [ ] Add cleanup for dead sessions?
 - [x] Change villain's max queries to better fit the actual amount required in the attack.
 - [ ] Put something in the README

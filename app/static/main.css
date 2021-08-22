@@ -6,9 +6,9 @@ canvas.avatar {
     height: 200px;
 }
 
-canvas.avatar-small {
+canvas.avatar-side {
     width: 100px;
-    height: 100px
+    height: 100px;
 }
 
 canvas.avatar-big {
