@@ -7,34 +7,43 @@
     <script>
         add_user_to_recents({{user.user_id}}, "{{user.name}}");
     </script>
-    <center>
-        <h1>
-            {{user.name}}
-        </h1>
-        <br/>
-        <canvas class="avatar avatar-big border border-dark rounded" data-user-id='{{user.user_id}}'></canvas>
-        <br/>
-        <h5>
-            Details:
-        </h5>
-        <p>
-            {% if user.is_private %}
-                {{user.name}} is a private user, so DNA is not shown.
-            {% else %}
-                DNA: {{user.dna}}
-            {% endif %}
-        </p>
-        <p>
-            {% if user.location %}
-                {{user.name}} is from {{user.location}}.
-            {% endif %}
-        </p>
-        <p>
-            {% if user.job %}
-                {{user.name}} works as a {{user.job}}.
-            {% endif %}
-        </p>
+    <div class="container pt-4 ps-0 m-0">
+        <div class="row p-0">
+            <div class="col-5 offset-1 p-0 d-flex justify-content-center bg-warning border border-dark border-5 border-bottom-0">
+                <canvas class="avatar avatar-big align-self-end p-0" data-user-id='{{user.user_id}}'></canvas>
+            </div>
+            <div class="col-auto d-flex bg-light">
+                <div class="container-fluid align-self-end m-0 p-0">
+                    <h1 class="display-1">
+                        {{user.name}}
+                    </h1>
+                    <p class="lead">
+                        {% if user.is_private %}
+                        {{user.name}} is a private user, so DNA is not shown.
+                        {% else %}
+                        DNA: {{user.dna}}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
         </div>
-    </center>
+        <div class="row bg-dark">
+            <div class="col-5 offset-1 text-light">
+                <p class="h4">
+                    About:
+                </p>
+                {% if user.location %}
+                    <p class="tab">
+                        {{user.name}} is from {{user.location}}.
+                    </p>
+                {% endif %}
+                {% if user.job %}
+                    <p class="tab">
+                        {{user.name}} works as a {{user.job}}.
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
