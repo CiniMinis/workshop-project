@@ -23,3 +23,7 @@ canvas.avatar-big {
 .tab {
     margin-left: 40px;
 }
+
+.recent_user {
+    text-decoration: none;
+}
