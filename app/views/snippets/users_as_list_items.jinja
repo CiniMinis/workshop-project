@@ -1,8 +1,8 @@
 {% for user in users %}
-<li class="list-group-item w-25">
-    <canvas class="avatar border border-primary" data-user-id='{{user.user_id}}'></canvas>
+<a href="/user/{{user.user_id}}" class="border list-group-item list-group-item-action w-25 pb-0">
     <h5>
-        <a href="/user/{{user.user_id}}">{{user.name}}</a>
+        {{user.name}}
     </h5>
-</li>
+    <canvas class="avatar" data-user-id='{{user.user_id}}'></canvas>
+</a>
 {% endfor %}
