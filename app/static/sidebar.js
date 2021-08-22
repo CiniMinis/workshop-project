@@ -22,8 +22,8 @@ $().ready(()=>{
     for (let i = 0; i < recent_users.length; i++) {
         [user_id, user_name] = recent_users[i];
         $("#sidebarRecentUsers").append(`
-            <a href="/user/${user_id}" class="recent_user container d-flex justify-content-start align-items-center p-2 m-2 bg-light border rounded border-dark">
-                <canvas class="avatar avatar-side border rounded border-dark me-4" data-user-id='${user_id}'></canvas>
+            <a href="/user/${user_id}" class="recent_user container d-flex justify-content-start align-items-center p-2 m-2 white-box rounded">
+                <canvas class="avatar avatar-side rounded light-box me-4" data-user-id='${user_id}'></canvas>
                 <h5>${user_name}</h5>
                 <h3 class="bi bi-clock-history ms-auto m-4"></h3>
             </a>

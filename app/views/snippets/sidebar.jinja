@@ -1,12 +1,12 @@
 {% block sidebar %}
-<div class="container p-2 d-flex flex-column text-center">
+<div class="container color-main p-2 d-flex flex-column text-center">
     <p>
-        <button type="button" class="btn btn-dark" id="sidebarSearchSettingsToggler" data-bs-toggle="collapse"
+        <button type="button" class="btn dark-btn" id="sidebarSearchSettingsToggler" data-bs-toggle="collapse"
             data-bs-target="#sidebarSearchSettings">
             <i class="bi"> Search Settings</i>
         </button>
     </p>
-    <div class="container bg-light border-dark text-dark border rounded">
+    <div class="container white-box rounded">
         <div class="collapse mt-2" id="sidebarSearchSettings">
             <select class="form-select" form="searchForm" name="privacySelect">
                 <option value="all" selected>Show public and private users</option>
@@ -34,7 +34,7 @@
 <div class="container-fluid" id="contentContainer">
     <div class="row">
         <!-- Sidebar Col -->
-        <div class="col-{{sidebar_col_size}} bg-primary text-light" id="sidebar">
+        <div class="col-{{sidebar_col_size}} color-main text-light" id="sidebar">
             {{ self.sidebar() }}
         </div>
         <!-- Content Col -->

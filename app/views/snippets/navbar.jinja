@@ -9,16 +9,16 @@
 
 {% macro nav_link(url, name, icon, is_active=False) -%}
 <a href="{{url}}"
-    class="p-2 nav-link text-nowrap {% if is_active %}active{% endif %} text-center">
+    class="p-2 nav-link text-nowrap {% if is_active %}active{% endif %} text-center dark-btn">
     <i class="bi {{icon}} d-block h4"></i>
     {{name}}
 </a>
 {%- endmacro %}
 
 <!-- Navbar snippet -->
-<nav class="navbar navbar-dark bg-dark p-2">
+<nav class="navbar color-dark p-2">
     <!-- Brand -->
-    <a href="#" class="navbar-brand p-4 me-4">
+    <a href="#" class="navbar-brand highlight-text p-4 me-4">
         Genetwork
     </a>
     
@@ -32,7 +32,7 @@
 
     <!-- Toggle page selection -->
     <div class="p-1 flex-shrink-1">
-        <button type="button" class="navbar-toggler" id="navbarPagesToggler" data-bs-toggle="collapse"
+        <button type="button" class="navbar-toggler dark-btn" id="navbarPagesToggler" data-bs-toggle="collapse"
             data-bs-target="#navbarPagesList">
             <i class="bi h3"></i>
         </button>
