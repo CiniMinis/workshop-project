@@ -4,18 +4,25 @@
 
 {% block content%}
 <script src='/static/draw.js'></script>
-    <center>
-        <h2 class="display-2">
-            Draw <small class="text-muted"> Anything You Can Imagine</small>
-        </h2>
-        <canvas class="avatar avatar-big border border-dark rounded mt-5" id="drawDNACanvas"></canvas>
-        <div class="conatiner w-50 d-flex align-items-center justify-content-center">
-            <div class="input-group d-flex align-items-stretch justify-content-center">
-                <span class="input-group-text">DNA:</span>
-                <input type="text" id="dnaToDraw" size="40"/>
-                <button type="button" class="btn btn-primary" id="drawDNABtn" onclick="draw_dna();">Draw</button>
+    <div class="container pt-4 ps-0 m-0">
+        <div class="row">
+            <div class="col-6 offset-1 d-flex">
+                <h2 class="display-2 text-center align-self-center">
+                    Draw <small class="text-muted"> Anything You Can Imagine</small>
+                </h2>
+            </div>
+            <div class="col-5 d-flex justify-content-end align-items-end p-0">
+                <canvas class="avatar w-100 h-100 border border-dark border-5 mt-5 border-bottom-0 bg-primary" id="drawDNACanvas"></canvas>
             </div>
         </div>
-    </center>
+        <div class="row text-light">
+            <div class="col-6 p-2 bg-dark offset-1">
+            </div>
+            <div class="col-5 bg-dark p-2 d-flex justify-content-end">
+                <input type="text" id="dnaToDraw" placeholder="DNA..." class="w-100 border border-warning"/>
+                <button type="button" class="btn btn-warning rounded-0" id="drawDNABtn" onclick="draw_dna();">Draw</button>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
