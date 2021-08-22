@@ -8,12 +8,14 @@
         <h2 class="display-2">
             Draw <small class="text-muted"> Anything You Can Imagine</small>
         </h2>
-        <br>
-        <br>
-        <canvas class="avatar avatar-big border border-primary" id="drawDNACanvas"></canvas>
-        <br>
-        <input type="text" id="dnaToDraw" size="80"/>
-        <button type="button" class="btn btn-primary" id="drawDNABtn" onclick="draw_dna();">Draw</button>
+        <canvas class="avatar avatar-big border border-dark rounded mt-5" id="drawDNACanvas"></canvas>
+        <div class="conatiner w-50 d-flex align-items-center justify-content-center">
+            <div class="input-group d-flex align-items-stretch justify-content-center">
+                <span class="input-group-text">DNA:</span>
+                <input type="text" id="dnaToDraw" size="40"/>
+                <button type="button" class="btn btn-primary" id="drawDNABtn" onclick="draw_dna();">Draw</button>
+            </div>
+        </div>
     </center>
 
 {% endblock %}
