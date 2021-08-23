@@ -32,29 +32,41 @@ class AppTestConfig(AppConfig):
 # TODO: make configurations for production
 
 
-# configuration for default flask sessions
+# configuration for easy mode- flask session cache
 class SessionConfig:
     SECRET_KEY = session_key
     SESSION_USE_SIGNER = True
 
-    def init_session(self, app):
+    def init_sessions(self, app):
         from app.modules.ssid_manager import SessionIdManager
         SessionIdManager.init_app(app)
+    
+    def set_session(self, app):
+        self.init_sessions(app)
+        from app.modules.user_cache import LRUSessionCache
+        app.config['CACHING_TYPE'] = LRUSessionCache
 
-# configuration for sqlalchemy flask session
+# configuration for medium mode- aes session cache
+class AESSessionConfig(SessionConfig):
+    def set_session(self, app):
+        super().init_sessions(app)
+        from app.modules.user_cache import AesLRUSessionCache
+        app.config['CACHING_TYPE'] = AesLRUSessionCache
+
+# configuration for hard mode- sql session cache
 class SQLSessionConfig(SessionConfig):
-    SESSION_TYPE = 'sqlalchemy'
-
-    def init_session(self, app):
+    def set_session(self, app):
+        super().init_sessions(app)
         from app.modules.user_cache import SqlLRUSessionCache
-        SqlLRUSessionCache.init_app(app)
+        app.config['CACHING_TYPE'] = SqlLRUSessionCache
 
 class AppConfigFactory:
     DEV_CONFIG_NAMES = ['dev', 'development']  # names for development
     TEST_CONFIG_NAMES = ['test', 'testing']
 
-    DEFAULT_SESSION_NAME = [None, 'default', 'cookie']
-    SQL_SESSION_NAME = ['sql', 'sqlalchemy']
+    DEFAULT_SESSION_NAME = [None, 'default', 'cookie', 'easy']
+    AES_SESSION_NAME = ['aes', 'encrypt', 'encrypted', 'medium', 'normal']
+    SQL_SESSION_NAME = ['sql', 'sqlalchemy', 'hard']
 
     def make(self, config_type, session_type=None):
         if config_type in self.DEV_CONFIG_NAMES:
@@ -66,6 +78,8 @@ class AppConfigFactory:
         
         if session_type in self.DEFAULT_SESSION_NAME:
             session_config = SessionConfig
+        elif session_type in self.AES_SESSION_NAME:
+            session_config = AESSessionConfig
         elif session_type in self.SQL_SESSION_NAME:
             session_config = SQLSessionConfig
         else:

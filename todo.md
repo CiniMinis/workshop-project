@@ -11,7 +11,7 @@
 - [x] Add success checking for the user. Should reset the the challenge after a failed check.
 - [x] Make working solution for SQLSessions!
 - [x] Create cosmetics/story for website
-- [ ] Package difficulties
+- [x] Package difficulties
 - [ ] Make configurations for production ~~and testing~~
 - [ ] Playtests!
 
@@ -25,6 +25,7 @@
 - [x] Allow cached functions to return any object
 - [x] Rename title in base template
 - [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
+- [ ] Refresh leak_part_from_cache.py and in general all the solution scripts
 - [ ] Make proper documentation for everything!!!
 - [ ] Difficulty adjusted text for homepage.
 - [ ] Make a logo?

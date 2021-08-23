@@ -1,4 +1,5 @@
 from app import db
+from flask import current_app
 from sqlalchemy.sql import func
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
@@ -36,33 +37,28 @@ class SqlLRUSessionCache(LRUSessionCache):
 
         super().__init__(*args, **kwargs)
     
-    @staticmethod
-    def make_databases():
-        for cache in SqlLRUSessionCache._DECLARED_SESSION_CACHES:
-            db.create_all(bind=cache.bind_name)
+    # @staticmethod
+    # def make_databases():
+    #     for cache in SqlLRUSessionCache._DECLARED_SESSION_CACHES:
+    #         db.create_all(bind=cache.bind_name)
     
-    @classmethod
-    def init_app(cls, app):
+    def _register_cache(self, app):
         # default is to make the session db in the default db's directory
         db_prefix = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'])
-        default_db_uri = os.path.join(db_prefix, cls.DEFAULT_DB_FORMAT)
+        default_db_uri = os.path.join(db_prefix, self.DEFAULT_DB_FORMAT)
 
-        new_binds = {}
-        for cache in cls._DECLARED_SESSION_CACHES:
-            if cache.db_uri is not None:
-                new_binds[cache.bind_name] = cache.db_uri
-            else:
-                new_binds[cache.bind_name] = default_db_uri.format(cache.cache_name)
+        new_bind = {}
+        if self.db_uri is not None:
+            new_bind[self.bind_name] = self.db_uri
+        else:
+            new_bind[self.bind_name] = default_db_uri.format(self.cache_name)
         
         if app.config['SQLALCHEMY_BINDS'] is None:
             app.config['SQLALCHEMY_BINDS'] = {}
         
-        app.config['SQLALCHEMY_BINDS'].update(new_binds)
+        app.config['SQLALCHEMY_BINDS'].update(new_bind)
 
-        with app.app_context():
-            cls.make_databases()
-
-        cls._SSID_MANAGER.init_app(app)
+        db.create_all(bind=self.bind_name)
     
     @property
     def bind_name(self):
@@ -120,3 +116,8 @@ class SqlLRUSessionCache(LRUSessionCache):
     
     def set_modified(self):
         pass
+    
+    def __call__(self, func):
+        decorated = super().__call__(func)
+        self._register_cache(current_app)
+        return decorated

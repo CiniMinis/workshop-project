@@ -1,15 +1,13 @@
 from app.models import SessionUsers, Villain
-from flask import jsonify, request, Blueprint, render_template
-from app.modules.user_cache import SqlLRUSessionCache
+from flask import jsonify, request, Blueprint, render_template, current_app
 from app.config.avatar import Avatar
 from functools import wraps
 from sqlalchemy.sql.expression import func
 import asyncio
 import json
-import os.path
-import base64
 
 api = Blueprint('api', __name__, url_prefix='/api', template_folder="views/snippets")
+caching_function = current_app.config['CACHING_TYPE']
 
 # general API consts
 PART_URL_TEMPLATE = "/img/avatar/{}/"
@@ -50,25 +48,17 @@ def make_json_api(*args, **kwargs):
         return decorated
     return decorator
 
-def img_to_data_uri(image_url):
-    image_path = PART_FILE_PREFIX + image_url
-    _, extention = os.path.splitext(image_path)
-    with open(image_path, 'rb') as img_file:
-        img_bytes = img_file.read()
-    encoded_img = base64.b64encode(img_bytes).decode('ascii')
-    return f"data:image/{extention};base64,{encoded_img}"
-
-@SqlLRUSessionCache(serializer=json)
+@caching_function(serializer=json)
 def part_to_dict(part):
     part_name = part.__class__.__name__.lower()
     part_path = PART_URL_TEMPLATE.format(part_name)
 
     border_image = f"{part_path}border{part.variation}.png"
-    part_dict = {'border_image': img_to_data_uri(border_image)}
+    part_dict = {'border_image': border_image}
 
     if part.IS_COLORABLE:
         color_image = f"{part_path}color{part.variation}.png"
-        color_dict = {'image': img_to_data_uri(color_image),
+        color_dict = {'image': color_image,
                       'color': part.color}
     else:
         color_dict = None
