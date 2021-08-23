@@ -9,10 +9,10 @@
     </script>
     <div class="container pt-4 ps-0 m-0">
         <div class="row p-0">
-            <div class="col-5 offset-1 p-0 d-flex justify-content-center bg-warning border border-dark border-5 border-bottom-0">
+            <div class="col-5 offset-1 p-0 d-flex justify-content-center light-box border-5 border-bottom-0">
                 <canvas class="avatar w-100 h-100 align-self-end p-0" data-user-id='{{user.user_id}}'></canvas>
             </div>
-            <div class="col-6 d-flex bg-light">
+            <div class="col-6 d-flex">
                 <div class="container-fluid align-self-end m-0 p-0">
                     <h1 class="display-1">
                         {{user.name}}
@@ -27,9 +27,9 @@
                 </div>
             </div>
         </div>
-        <div class="row bg-dark">
-            <div class="col-5 offset-1 text-light">
-                <p class="h4">
+        <div class="row color-dark">
+            <div class="col-5 offset-1 text-light fw-bold">
+                <p class="h4 highlight-text">
                     {% if user.location or user.job %}
                         About:
                     {% endif %}

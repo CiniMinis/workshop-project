@@ -44,6 +44,10 @@ canvas.avatar-big {
     color: var(--highlight-color);
 }
 
+.light-text {
+    color: var(--light-color);
+}
+
 .dark-btn {
     background-color: var(--dark-color);
     color: var(--main-color);
@@ -60,6 +64,16 @@ canvas.avatar-big {
 }
 
 .dark-btn.active:hover {
+    background-color: var(--highlight-color);
+    color: var(--dark-color);
+}
+
+.highlight-btn {
+    background-color: var(--highlight-color);
+    color: var(--black);
+}
+
+.highlight-btn:hover {
     background-color: var(--highlight-color);
     color: var(--dark-color);
 }
@@ -91,6 +105,13 @@ canvas.avatar-big {
 }
 
 .highlight-box {
+    background-color: var(--white);
+    border-style: solid;
+    border-color: var(--highlight-color);
+    color: var(--black);
+}
+
+.dark-highlight-box {
     background-color: var(--highlight-color);
     border-style: solid;
     border-color: var(--dark-color);
