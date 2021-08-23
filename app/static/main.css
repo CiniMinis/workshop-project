@@ -2,10 +2,10 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 
 :root {
-    --main-color: #A4CDEA;
-    --dark-color: #3434b8;
-    --light-color: #CCF6FF;
-    --highlight-color: #EB9928;
+    --main-color: #618eac;
+    --dark-color: #1F4875;
+    --light-color: #E6F4F1;
+    --highlight-color: #f3eb8d;
     --white: #FFFFF0;
     --black: #0c0c30;
 }
@@ -32,8 +32,8 @@ canvas.avatar-big {
 
 .color-dark {
     height: 100px;
-    background-color: var(--dark-color);
-    color: var(--light-color);
+    background-color: var(--dark-color) !important;
+    color: var(--light-color) !important;
 }
 
 .highlight-text {
@@ -48,15 +48,19 @@ canvas.avatar-big {
     color: var(--light-color);
 }
 
+.light-text:hover {
+    color: var(--light-color);
+}
+
 .dark-btn {
     background-color: var(--dark-color);
-    color: var(--main-color);
+    color: var(--light-color);
     border-radius: 10px;
 }
 
 .dark-btn:hover {
     background-color: var(--main-color);
-    color: var(--dark-color);
+    color: var(--light-color);
 }
 
 .dark-btn.active {
@@ -65,17 +69,17 @@ canvas.avatar-big {
 
 .dark-btn.active:hover {
     background-color: var(--highlight-color);
-    color: var(--dark-color);
+    color: var(--main-color);
 }
 
 .highlight-btn {
     background-color: var(--highlight-color);
-    color: var(--black);
+    color: var(--dark-color);
 }
 
 .highlight-btn:hover {
-    background-color: var(--highlight-color);
-    color: var(--dark-color);
+    background-color: var(--main-color);
+    color: var(--highlight-color);
 }
 
 .tab {
@@ -116,6 +120,18 @@ canvas.avatar-big {
     border-style: solid;
     border-color: var(--dark-color);
     color: var(--dark-color);
+}
+
+.query-user {
+    opacity: 0.8;
+}
+
+.query-user:hover {
+    opacity: 1;
+}
+
+.query-user:hover > .color-dark {
+    color: var(--highlight-color) !important;
 }
 
 /* from stackoverflow, colors switches
