@@ -139,8 +139,16 @@ canvas.avatar-big {
     font-size: 0.8vw;
 }
 
+.query-user > .avatar {
+    filter: blur(1px);
+}
+
 .query-user:hover {
     opacity: 1;
+}
+
+.query-user:hover > .avatar {
+    filter: blur(0px);
 }
 
 .query-user:hover > .color-dark {
