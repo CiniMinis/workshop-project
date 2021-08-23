@@ -90,6 +90,11 @@ canvas.avatar-big {
     text-decoration: none;
 }
 
+.recent_user:hover {
+    background-color: var(--highlight-color);
+    color: var(--dark-color);
+}
+
 .color-main {
     background-color: var(--main-color);
 }
