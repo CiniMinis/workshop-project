@@ -2,7 +2,7 @@ from sqlalchemy import literal
 from app.config.avatar import Avatar
 from app import db
 from faker import Faker
-from .modules.ssid_manager import SessionIdManager
+from .modules.session_manager import SessionHandler
 import random
 
 def choose_with_prob(cand1, cand2, prob1):
@@ -73,12 +73,12 @@ class UserFactory:
 class Villain(db.Model):
     __tablename__ = 'villains'
 
-    _SSID_MANAGER = SessionIdManager()
+    _SESSION_HANDLER = SessionHandler()
     MAX_DETECTIONS = 256
     _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs
-    ssid = db.Column(db.String(_SSID_MANAGER.UUID_LEN), primary_key=True, nullable=False)
+    ssid = db.Column(db.String(_SESSION_HANDLER.UUID_LEN), primary_key=True, nullable=False)
     # tracks the number queries to protected columns
     detections = db.Column(db.Integer, nullable=False, default=0)
     # dna for villain
@@ -137,7 +137,7 @@ class Villain(db.Model):
         return fake_columns
 
     @staticmethod
-    @SessionIdManager.call_on_new
+    @_SESSION_HANDLER.on_session_create
     def _make_villain(new_ssid):
         db.session.add(
             Villain(
@@ -160,7 +160,7 @@ class FakeQueryMeta(type):
 
 
 class SessionUsers(metaclass=FakeQueryMeta):
-    _SSID_MANAGER = SessionIdManager()
+    _SESSION_HANDLER = SessionHandler()
 
     # References to the User columns
     # allows column access via this class instead of User
@@ -175,7 +175,7 @@ class SessionUsers(metaclass=FakeQueryMeta):
     def fake_query(cls):
         static_users = User.query
         try:
-            ssid = cls._SSID_MANAGER.current_ssid
+            ssid = cls._SESSION_HANDLER.ssid
             relevant_villains = db.session.query(*Villain.get_user_columns()).filter(Villain.ssid==ssid)
             return relevant_villains.union(static_users)
         except ValueError:

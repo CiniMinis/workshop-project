@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm.exc import StaleDataError
 from sqlalchemy.exc import IntegrityError
 from .lru_session_cache import LRUSessionCache
-from ..ssid_manager import SessionIdManager
+from ..session_manager import SessionHandler
 import os
 
 
@@ -13,7 +13,7 @@ class SqlLRUSessionCache(LRUSessionCache):
     DEFAULT_SIZE = 64
     BIND_NAME_TEMPLATE = "sql_session_cache: {}"
     _DECLARED_SESSION_CACHES = []
-    _SSID_MANAGER = SessionIdManager()
+    _SESSION_HANDLER = SessionHandler()
 
     def __init__(self, db_uri=None, *args, **kwargs):
         self.db_uri = db_uri
@@ -24,7 +24,7 @@ class SqlLRUSessionCache(LRUSessionCache):
         class CacheRecord(db.Model):
             __bind_key__ = self.bind_name
             id = db.Column(db.Integer, primary_key=True)
-            ssid = db.Column(db.String(self._SSID_MANAGER.UUID_LEN), nullable=False)
+            ssid = db.Column(db.String(self._SESSION_HANDLER.UUID_LEN), nullable=False)
             cache_key = db.Column(db.PickleType)
             cache_value = db.Column(db.PickleType)
             last_access = db.Column(db.DateTime)
@@ -36,11 +36,6 @@ class SqlLRUSessionCache(LRUSessionCache):
         self.CacheRecord = CacheRecord
 
         super().__init__(*args, **kwargs)
-    
-    # @staticmethod
-    # def make_databases():
-    #     for cache in SqlLRUSessionCache._DECLARED_SESSION_CACHES:
-    #         db.create_all(bind=cache.bind_name)
     
     def _register_cache(self, app):
         # default is to make the session db in the default db's directory
@@ -66,7 +61,7 @@ class SqlLRUSessionCache(LRUSessionCache):
     
     @property
     def current_ssid(self):
-        return self._SSID_MANAGER.current_ssid
+        return self._SESSION_HANDLER.ssid
     
     @property
     def _cache(self):

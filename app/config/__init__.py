@@ -38,8 +38,8 @@ class SessionConfig:
     SESSION_USE_SIGNER = True
 
     def init_sessions(self, app):
-        from app.modules.ssid_manager import SessionIdManager
-        SessionIdManager.init_app(app)
+        from app.modules.session_manager import create_sessions
+        create_sessions(app)
     
     def set_session(self, app):
         self.init_sessions(app)
