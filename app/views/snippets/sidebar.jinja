@@ -1,5 +1,5 @@
 {% block sidebar %}
-<div class="container color-main p-2 d-flex flex-column text-center">
+<div class="container-fluid color-main p-2 d-flex flex-column text-center">
     <p>
         <button type="button" class="btn dark-btn" id="sidebarSearchSettingsToggler" data-bs-toggle="collapse"
             data-bs-target="#sidebarSearchSettings">
@@ -34,7 +34,7 @@
 <div class="container-fluid" id="contentContainer">
     <div class="row">
         <!-- Sidebar Col -->
-        <div class="col-{{sidebar_col_size}} color-main text-light" id="sidebar">
+        <div class="col-{{sidebar_col_size}} color-main text-light min-vh-100" id="sidebar">
             {{ self.sidebar() }}
         </div>
         <!-- Content Col -->

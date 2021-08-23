@@ -21,8 +21,8 @@ canvas.avatar {
 }
 
 canvas.avatar-side {
-    width: 100px;
-    height: 100px;
+    width: 5vw;
+    height: 5vw;
 }
 
 canvas.avatar-big {
@@ -88,6 +88,12 @@ canvas.avatar-big {
 
 .recent_user {
     text-decoration: none;
+    font-size: 1vw;
+    font-weight: bold;
+}
+
+.recent_user > h3 {
+    font-size: 2vw;
 }
 
 .recent_user:hover {
@@ -129,6 +135,8 @@ canvas.avatar-big {
 
 .query-user {
     opacity: 0.8;
+    font-weight: bold;
+    font-size: 0.8vw;
 }
 
 .query-user:hover {

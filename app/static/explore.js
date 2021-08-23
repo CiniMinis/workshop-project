@@ -17,8 +17,9 @@ window.onbeforeunload = () => {
 
 // When page reaches bottom, load more users
 $(window).scroll(function() {
+    bottom_margin = 10;
     // check if bottom of page is reached
-    if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
+    if( $(window).scrollTop() > $(document).height() - $(window).height() - bottom_margin ) {
         get_more_users()
             .then((new_content) => {
                 $("#exploreUserList").append(new_content);
