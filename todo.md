@@ -10,19 +10,22 @@
 - [x] Make challenges per user change each time
 - [x] Add success checking for the user. Should reset the the challenge after a failed check.
 - [x] Make working solution for SQLSessions!
-- [ ] Create cosmetics/story for website
+- [x] Create cosmetics/story for website
+- [ ] Package difficulties
 - [ ] Make configurations for production ~~and testing~~
 - [ ] Playtests!
 
 # Mini-Tasks
 - ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)
-- [ ] Adjust for smaller screens
+- [x] Adjust for smaller screens
 - [ ] Add cleanup for dead sessions?
 - [x] Change villain's max queries to better fit the actual amount required in the attack.
 - [ ] Put something in the README
-- [ ] Maybe clean-up the async vs. sync logic in make_json_api.
+- ~~Maybe clean-up the async vs. sync logic in make_json_api.~~ Pretty much as good as possible, converting sync->async is sloppy and returns the wrong type...
 - [x] Allow cached functions to return any object
 - [x] Rename title in base template
 - [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [ ] Make proper documentation for everything!!!
-- [ ] Containerize for deployment?
+- [ ] Difficulty adjusted text for homepage.
+- [ ] Make a logo?
+- [ ] Containerize for deployment
