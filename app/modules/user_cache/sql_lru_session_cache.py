@@ -55,6 +55,13 @@ class SqlLRUSessionCache(LRUSessionCache):
 
         db.create_all(bind=self.bind_name)
     
+    @staticmethod
+    @_SESSION_HANDLER.on_session_delete
+    def _delete_session(ssid):
+        for cache in SqlLRUSessionCache._DECLARED_SESSION_CACHES:
+            cache.CacheRecord.query.filter_by(ssid=ssid).delete()
+        db.session.commit()
+    
     @property
     def bind_name(self):
         return self.BIND_NAME_TEMPLATE.format(self.index)

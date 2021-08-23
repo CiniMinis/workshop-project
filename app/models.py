@@ -122,7 +122,7 @@ class Villain(db.Model):
 
     @staticmethod
     def get_session_villain():
-        cur_ssid = Villain._SSID_MANAGER.current_ssid
+        cur_ssid = Villain._SESSION_HANDLER.ssid
         return Villain.query.filter_by(ssid=cur_ssid).first()
 
     @classmethod
@@ -145,6 +145,12 @@ class Villain(db.Model):
                 dna=Villain._DNA_RANDOMIZER(),
             )
         )
+        db.session.commit()
+    
+    @staticmethod
+    @_SESSION_HANDLER.on_session_delete
+    def _delete_villain(ssid):
+        Villain.query.filter_by(ssid=ssid).delete()
         db.session.commit()
 
 class FakeQueryMeta(type):

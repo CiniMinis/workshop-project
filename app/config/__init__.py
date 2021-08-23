@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from instance import session_key
+from instance import session_key, APP_SESSION_DURATION
 
 FILE_DIR = os.path.abspath(os.path.dirname(__file__))
 INSTANCE_DIR = os.path.join(FILE_DIR, '../../instance')
@@ -39,7 +39,7 @@ class SessionConfig:
 
     def init_sessions(self, app):
         from app.modules.session_manager import create_sessions
-        create_sessions(app)
+        create_sessions(app, session_duration=APP_SESSION_DURATION)
     
     def set_session(self, app):
         self.init_sessions(app)

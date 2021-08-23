@@ -15,6 +15,7 @@ def create_app(app_type=app_config_type, session_type=session_config_type):
     # imports inside create_app to avoid circular import
     with app.app_context():
         db.init_app(app)
+        app.db = db
         app_config.set_session(app)
         
         from app.api import api

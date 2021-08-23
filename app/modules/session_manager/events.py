@@ -1,15 +1,6 @@
 from uuid import uuid4
 from flask import session, current_app
-from app import db
 from enum import Enum
-
-_DB_BIND = "active_sessions"
-_UUID_LEN = 36
-
-class SessionId(db.Model):
-    __bind_key__ = _DB_BIND
-    ssid = db.Column(db.String(_UUID_LEN), primary_key=True)
-    last_connection = db.Column(db.DateTime)
 
 class SessionEvent(Enum):
     CREATE = "create_handler"
@@ -18,7 +9,7 @@ class SessionEvent(Enum):
     
 class SessionHandler:
     SESSION_ID_FIELD = "SessionId"
-    UUID_LEN = _UUID_LEN
+    UUID_LEN = 36
     _clients = []
     _apps = []
     
