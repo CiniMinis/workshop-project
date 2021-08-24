@@ -12,8 +12,9 @@
 - [x] Make working solution for SQLSessions!
 - [x] Create cosmetics/story for website
 - [x] Package difficulties
-- [ ] Make configurations for production ~~and testing~~
+- [x] Make configurations for production ~~and testing~~
 - [ ] Playtests!
+- [ ] Containerize for deployment and run using standalone (WSGI container)
 
 # Mini-Tasks
 - ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)
@@ -29,4 +30,3 @@
 - [ ] Make proper documentation for everything!!!
 - [ ] Difficulty adjusted text for homepage.
 - [ ] Make a logo? Change up fonts?
-- [ ] Containerize for deployment
