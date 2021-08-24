@@ -28,5 +28,5 @@
 - [ ] Refresh leak_part_from_cache.py and in general all the solution scripts
 - [ ] Make proper documentation for everything!!!
 - [ ] Difficulty adjusted text for homepage.
-- [ ] Make a logo?
+- [ ] Make a logo? Change up fonts?
 - [ ] Containerize for deployment
