@@ -6,7 +6,7 @@ from app import db, create_app
 USER_COUNT = 128
 
 # debugging consts
-SHOULD_DISPLAY = True
+SHOULD_DISPLAY = False
 DISPLAY_COUNT = 5
 
 if __name__ == '__main__':
