@@ -9,29 +9,31 @@
 
 {% macro nav_link(url, name, icon, is_active=False) -%}
 <a href="{{url}}"
-    class="p-2 nav-link text-nowrap {% if is_active %}active{% endif %} text-center dark-btn">
+    class="p-1 nav-link text-nowrap {% if is_active %}active{% endif %} text-center dark-btn">
     <i class="bi {{icon}} d-block h4"></i>
     {{name}}
 </a>
 {%- endmacro %}
 
 <!-- Navbar snippet -->
-<nav class="navbar color-dark p-2">
+<nav class="navbar color-dark py-0">
     <!-- Brand -->
-    <a href="#" class="navbar-brand highlight-text p-4 me-4 fw-bold">
+    <a href="#" class="navbar-brand highlight-text px-4 py-0 me-4 fw-bold">
         Genetwork
     </a>
     
     <!-- Search bar -->
-    <form class="d-flex me-auto" id="searchForm" action='/' method='post'>
-        <input type="search" class="form-control" placeholder="Search for users" name="search" />
-        <button type="submit" class="btn btn-outline-light m-2">
-            Search
+    <form class="d-flex me-auto py-0 align-items-center" id="searchForm" action='/' method='post'>
+        <input type="search" class="form-control" placeholder="Search for users" name="search" size="30"/>
+        <button type="submit" class="btn btn-outline-light m-2 text-center">
+            <span class="d-flex align-items-center h-100 w-100 justify-content-center">
+                <i class="bi bi-search me-1"></i> Search
+            </span>
         </button>
     </form>
 
     <!-- Toggle page selection -->
-    <div class="p-1 flex-shrink-1">
+    <div class="px-1 py-0 flex-shrink-1">
         <button type="button" class="navbar-toggler dark-btn" id="navbarPagesToggler" data-bs-toggle="collapse"
             data-bs-target="#navbarPagesList">
             <i class="bi h3"></i>
@@ -39,7 +41,7 @@
     </div>
 
     <!-- Page navigation links-->
-    <div class="p-2 collapse show collapse-horizontal" id="navbarPagesList" aria-expanded="true">
+    <div class="px-2 py-0 collapse show collapse-horizontal" id="navbarPagesList" aria-expanded="true">
         <div class="d-flex flex-row navbar-nav">
             {% for page, url, name, icon in navbar_page_links %}
                 {{nav_link(url, name, icon, page==active_page)}}

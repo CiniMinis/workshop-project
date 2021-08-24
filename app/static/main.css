@@ -82,6 +82,48 @@ canvas.avatar-big {
     color: var(--highlight-color);
 }
 
+.navbar {
+    height: 10vh;
+}
+
+#searchForm {
+    height: 4.5vh;
+    width: min(23%, 350px);
+}
+
+#searchForm > input[type='search'] {
+    font-size: min(2vh, 13px);
+    height: 4vh;
+}
+
+#searchForm > .btn {
+    height: 4.5vh;
+    /* max-width: 9vw; */
+    width: 7em;
+    font-size: min(2vh, 15px);
+}
+
+
+.navbar-brand {
+    font-size: 4vh;
+}
+
+.nav-link {
+    font-size: 1.75vh;
+}
+
+.navbar-nav .bi {
+    font-size: 2.5vh;
+}
+
+#sidebarSearchSettings {
+    font-size: 85%;
+}
+
+#sidebarSearchSettings select {
+    font-size: 95%;
+}
+
 .tab {
     margin-left: 40px;
 }
