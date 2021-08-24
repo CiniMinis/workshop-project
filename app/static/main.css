@@ -154,24 +154,3 @@ canvas.avatar-big {
 .query-user:hover > .color-dark {
     color: var(--highlight-color) !important;
 }
-
-/* from stackoverflow, colors switches
-
-.custom-control-input:focus~.custom-control-label::before {
-    border-color: var(--main-color) !important;
-    box-shadow: 0 0 0 0.2rem var(--dark-color) !important;
-}
-
-.custom-control-input:checked~.custom-control-label::before {
-    border-color: var(--main-color) !important;
-    background-color: var(--main-color) !important;
-}
-
-.custom-control-input:active~.custom-control-label::before {
-    border-color: var(--main-color) !important;
-    background-color: var(--main-color) !important;
-}
-
-.custom-control-input:focus:not(:checked)~.custom-control-label::before {
-    border-color: var(--main-color) !important;
-} */
