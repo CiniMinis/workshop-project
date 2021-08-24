@@ -92,8 +92,8 @@ canvas.avatar-big {
     font-weight: bold;
 }
 
-.recent_user > h3 {
-    font-size: 2vw;
+.recent_user .bi {
+    font-size: 1.5vw;
 }
 
 .recent_user:hover {

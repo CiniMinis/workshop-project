@@ -11,7 +11,7 @@ $().ready(()=>{
             <a href="/user/${user_id}" class="recent_user container d-flex justify-content-start align-items-center p-2 m-2 white-box rounded">
                 <canvas class="avatar avatar-side rounded light-box me-2" data-user-id='${user_id}'></canvas>
                 ${user_name}
-                <h3 class="bi bi-clock-history ms-auto me-2"></h3>
+                <h3 class="bi bi-clock-history ms-auto align-self-start"></h3>
             </a>
         `);
     }
