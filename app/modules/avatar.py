@@ -49,7 +49,9 @@ class BodyPart(ABC):
     
     def __repr__(self):
         part_name = self.__class__.__name__
-        return f"{part_name}(variation={self.variation!r}, color={self.color!r})"
+        if self.IS_COLORABLE:
+            return f"{part_name}(variation={self.variation!r}, color={COLOR_NAMES.index(self.color)!r})"
+        return f"{part_name}(variation={self.variation!r})"
 
     def _encode_variation(self):
         if self.VARIATIONS == 1:
