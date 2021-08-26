@@ -37,6 +37,8 @@ class DeploymentConfig(ABC):
 class DevelopmentDeployment(DeploymentConfig):
     DB_NAME = 'development.db'
     ENV = 'development'
+    DEBUG = True
+    TEMPLATES_AUTO_RELOAD = True
 
 # configuration for testing
 class TestDeployment(DeploymentConfig):
@@ -65,6 +67,11 @@ class CacheConfig(ABC):
     @abstractmethod
     def cache_setup(self, app):
         raise NotImplementedError()
+    
+    @property
+    @abstractmethod
+    def INDEX_PAGE_TEMPLATE(self):
+        raise NotImplementedError()
 
     def init_app(self, app):
         from app.modules.session_manager import create_sessions
@@ -79,18 +86,25 @@ class EasyCacheConfig(CacheConfig):
     def cache_setup(self, app):
         from app.modules.user_cache import LRUSessionCache
         app.config['CACHING_TYPE'] = LRUSessionCache
+    
+    INDEX_PAGE_TEMPLATE = 'index_easy.jinja'
 
 # configuration for medium mode- aes session cache
 class MediumCacheConfig(CacheConfig):
     def cache_setup(self, app):
         from app.modules.user_cache import AesLRUSessionCache
         app.config['CACHING_TYPE'] = AesLRUSessionCache
+        
+    INDEX_PAGE_TEMPLATE = 'index_medium.jinja'
+
 
 # configuration for hard mode- sql session cache
 class HardCacheConfig(CacheConfig):
     def cache_setup(self, app):
         from app.modules.user_cache import SqlLRUSessionCache
         app.config['CACHING_TYPE'] = SqlLRUSessionCache
+    
+    INDEX_PAGE_TEMPLATE = 'index_hard.jinja'
 
 class AppConfigFactory:
     DEV_CONFIG_NAMES = ['dev', 'development']  # names for development

@@ -1,0 +1,18 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+
+    <center>
+        <h1 class="display-1 pt-5">
+            Genetwork
+        </h1>
+        <p class="lead">
+            Making your online identity unique.
+        </p>
+    </center>
+    <div class="container rounded-3 border py-3 m-5">
+        {% block index_content %}
+        {% endblock %}
+    </div>
+
+{% endblock %}

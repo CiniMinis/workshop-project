@@ -38,7 +38,7 @@ def make_json_api(*args, **kwargs):
             except CAUGHT_ERRORS as e:
                 resp['status'] = 'fail'
                 resp['content'] = str(e)
-            print(resp)
+            
             return jsonify(**resp)
         
         if asyncio.iscoroutinefunction(func):

@@ -1,4 +1,4 @@
-from flask import send_from_directory, render_template, Blueprint, abort, request
+from flask import send_from_directory, render_template, Blueprint, abort, request, current_app
 from sqlalchemy.sql.expression import func
 from app.models import SessionUsers, Villain
 import os
@@ -26,7 +26,9 @@ def static_files(path):
 @controllers.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'GET':
-        return render_template("index.jinja")
+        if 'INDEX_PAGE_TEMPLATE' in current_app.config:
+            return render_template(current_app.config['INDEX_PAGE_TEMPLATE'])
+        return render_template('index_base.jinja')
     
     # get initial search matches
     search_term = request.form.get('search')

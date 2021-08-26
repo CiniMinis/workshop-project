@@ -28,6 +28,6 @@
 - [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [x] Refresh leak_part_from_cache.py and in general all the solution scripts
 - [ ] Make proper documentation for everything!!!
-- [ ] Difficulty adjusted text for homepage.
+- [x] Difficulty adjusted text for homepage.
 - [ ] Improve draw DNA error handling.
 - [ ] Make a logo? Change up fonts?
