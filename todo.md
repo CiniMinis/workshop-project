@@ -30,4 +30,4 @@
 - [ ] Make proper documentation for everything!!!
 - [x] Difficulty adjusted text for homepage.
 - [x] Improve draw DNA error handling.
-- [ ] Make a logo? Change up fonts?
+- [x] ~~Make a logo?~~ (logo is impractical) Change up fonts?
