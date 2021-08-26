@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Roboto&display=swap');
+
 body {
     background-color: black;
     color: lime;
@@ -5,6 +7,7 @@ body {
     padding-top: 5em;
     display: flex;
     justify-content: center;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* typewriter is based on css-tricks.com */
@@ -14,6 +17,7 @@ body {
     white-space: nowrap;
     margin: 0 auto;
     letter-spacing: .15em;
+    font-family: 'IBM Plex Mono', monospace;
     animation: 
       typing 3.5s steps(40, end),
       blink-caret .75s step-end infinite;
@@ -21,10 +25,12 @@ body {
 
 .l33t-btn, .l33t-btn:visited {
     background-color: limegreen;
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 .l33t-btn:hover {
     background-color: lime;
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 .appear{
