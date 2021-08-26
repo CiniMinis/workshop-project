@@ -1,7 +1,7 @@
 from flask import send_from_directory, render_template, Blueprint, abort, request
 from sqlalchemy.sql.expression import func
 from app.models import SessionUsers, Villain
-from instance import FLAG
+import os
 
 # directory constants
 STATIC_DIR = "static"
@@ -30,7 +30,7 @@ def home():
     
     # get initial search matches
     search_term = request.form.get('search')
-    query = SessionUsers.query.filter(SessionUsers.name.like(f"%{search_term}%"))
+    query = SessionUsers.query.filter(SessionUsers.name.ilike(f"%{search_term}%"))
 
     # enforce privacy select
     privacy_select = request.form.get('privacySelect')
@@ -77,7 +77,11 @@ def check_villain_dna():
     session_villain = Villain.get_session_villain()
     
     if session_villain.dna == submitted_dna:
-        return render_template("check_challenge.jinja", win=True, message="The Flag Is: {}".format(FLAG))
+        flag = os.environ.get('FLAG')
+        if flag is None:
+            from instance import FLAG
+            flag = FLAG
+        return render_template("check_challenge.jinja", win=True, message="The Flag Is: {}".format(flag))
     else:
         session_villain.shapeshift()
         return render_template("check_challenge.jinja", win=False)

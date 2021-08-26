@@ -6,3 +6,4 @@ faker
 pycryptodome
 uuid
 gunicorn
+psycopg2-binary

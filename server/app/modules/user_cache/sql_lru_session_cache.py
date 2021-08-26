@@ -9,20 +9,20 @@ import os
 
 
 class SqlLRUSessionCache(LRUSessionCache):
-    DEFAULT_DB_FORMAT = "SqlSessions_{}.db"
     DEFAULT_SIZE = 64
-    BIND_NAME_TEMPLATE = "sql_session_cache: {}"
+    DB_NAME = "sql_sessions"
+    BIND_NAME = "sql_sessions"
+    TABLE_NAME_TEMPLATE = "sql_session_cache_{}"
     _DECLARED_SESSION_CACHES = []
     _SESSION_HANDLER = SessionHandler()
 
-    def __init__(self, db_uri=None, *args, **kwargs):
-        self.db_uri = db_uri
-
+    def __init__(self, *args, **kwargs):
         self.index = len(self._DECLARED_SESSION_CACHES)
         self._DECLARED_SESSION_CACHES.append(self)
 
         class CacheRecord(db.Model):
-            __bind_key__ = self.bind_name
+            __bind_key__ = self.BIND_NAME
+            __tablename__ = self.table_name
             id = db.Column(db.Integer, primary_key=True)
             ssid = db.Column(db.String(self._SESSION_HANDLER.UUID_LEN), nullable=False)
             cache_key = db.Column(db.PickleType)
@@ -40,20 +40,13 @@ class SqlLRUSessionCache(LRUSessionCache):
     def _register_cache(self, app):
         # default is to make the session db in the default db's directory
         db_prefix = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'])
-        default_db_uri = os.path.join(db_prefix, self.DEFAULT_DB_FORMAT)
-
-        new_bind = {}
-        if self.db_uri is not None:
-            new_bind[self.bind_name] = self.db_uri
-        else:
-            new_bind[self.bind_name] = default_db_uri.format(self.cache_name)
+        db_uri = os.path.join(db_prefix, self.DB_NAME)
+        new_bind = {self.BIND_NAME: db_uri}
         
         if app.config['SQLALCHEMY_BINDS'] is None:
             app.config['SQLALCHEMY_BINDS'] = {}
         
         app.config['SQLALCHEMY_BINDS'].update(new_bind)
-
-        db.create_all(bind=self.bind_name)
     
     @staticmethod
     @_SESSION_HANDLER.on_session_delete
@@ -63,8 +56,8 @@ class SqlLRUSessionCache(LRUSessionCache):
         db.session.commit()
     
     @property
-    def bind_name(self):
-        return self.BIND_NAME_TEMPLATE.format(self.index)
+    def table_name(self):
+        return self.TABLE_NAME_TEMPLATE.format(self.index)
     
     @property
     def current_ssid(self):

@@ -1,33 +1,30 @@
 from .events import SessionEvent, SessionHandler
 from sqlalchemy.sql import func
 from flask import copy_current_request_context
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from threading import Thread
 import os.path
 import time
 
-_DB_BIND_TEMPLATE = "active_sessions_{}"
 
 class SessionGarbageCollector(SessionHandler):
     _next_gc_id = 0
-    DEFAULT_DB_FORMAT = 'GarbageCollector_{}.db'
+    DB_BIND = "active_sessions"
+    TABLE_TEMPLATE = "GC_{}"
+    DB_NAME = "active_sessions"
     
-    def __init__(self, session_duration, clean_interval, db_uri=None):
-        self.session_duration = session_duration
+    def __init__(self, session_duration, clean_interval):
+        self.session_duration = timedelta(seconds=session_duration)
         self.clean_interval = clean_interval
         self._gc_id = SessionGarbageCollector._next_gc_id 
         SessionGarbageCollector._next_gc_id += 1
-        self.bind_name = _DB_BIND_TEMPLATE.format(self._gc_id)
         
         # call super for app register
         super().__init__()
         
-        if db_uri is None:
-            # default is to make the session db in the default db's directory
-            db_prefix = os.path.dirname(self.app.config['SQLALCHEMY_DATABASE_URI'])
-            db_uri = os.path.join(db_prefix, self.DEFAULT_DB_FORMAT.format(self._gc_id)) 
-        
-        self._make_db(db_uri)
+        db_prefix = os.path.dirname(self.app.config['SQLALCHEMY_DATABASE_URI'])
+        self.db_uri = os.path.join(db_prefix, self.DB_NAME) 
+        self._make_db()
         
         # deactivates changing the event handlers
         self.on_session_create = self.on_session_connect = self.on_session_delete = lambda func: func
@@ -38,9 +35,10 @@ class SessionGarbageCollector(SessionHandler):
         
         self.started = False
     
-    def _make_db(self, db_uri):
+    def _make_db(self):
         class SessionId(self.app.db.Model):
-            __bind_key__ = self.bind_name
+            __bind_key__ = self.DB_BIND
+            __tablename__ = self.TABLE_TEMPLATE.format(self._gc_id)
             ssid = self.app.db.Column(self.app.db.String(SessionHandler.UUID_LEN), primary_key=True)
             last_connection = self.app.db.Column(self.app.db.DateTime)
             
@@ -48,14 +46,12 @@ class SessionGarbageCollector(SessionHandler):
                 return f"SSID: {self.ssid} (last {self.last_connection})"
         
         self.SessionTable = SessionId
-        new_bind = {self.bind_name: db_uri}
+        new_bind = {self.DB_BIND: self.db_uri}
         
         if self.app.config['SQLALCHEMY_BINDS'] is None:
             self.app.config['SQLALCHEMY_BINDS'] = {}
         
-        self.app.config['SQLALCHEMY_BINDS'].update(new_bind)
-        
-        self.app.db.create_all(bind=self.bind_name)   
+        self.app.config['SQLALCHEMY_BINDS'].update(new_bind) 
         
     
     def start(self):

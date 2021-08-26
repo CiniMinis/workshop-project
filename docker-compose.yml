@@ -3,9 +3,38 @@ version: "3.9"
 services:
   web:
     build: .
+    secrets:
+      - db_password
+      - session_key
     ports: 
       - "5000:5000"
     volumes:
       - './server:/home/server'
-
-      
+    env_file:
+      - config.env
+    environment: 
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+      - SESSION_KEY_FILE=/run/secrets/session_key
+    depends_on: 
+      - db
+  
+  db:
+    image: postgres:latest
+    secrets:
+      - db_password
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+      - ./db_startup_scripts/:/docker-entrypoint-initdb.d/
+    ports: 
+      - "5432:5432"
+    environment: 
+      - POSTGRES_USER=genetwork
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+volumes:
+  db_data:
+secrets:
+  db_password:
+    file: './database_password.secret'
+  session_key:
+    file: './session_key.secret'
+  

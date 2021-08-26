@@ -17,4 +17,4 @@ RUN pip install -r /tmp/requirements.txt
 # open the server port
 EXPOSE 5000
 USER server
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "app:create_app()"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "25", "app:create_app()"]

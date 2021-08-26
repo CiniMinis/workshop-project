@@ -14,7 +14,7 @@
 - [x] Package difficulties
 - [x] Make configurations for production ~~and testing~~
 - [ ] Playtests!
-- [ ] Containerize for deployment and run using standalone (WSGI container)
+- [x] Containerize for deployment and run using standalone (WSGI container)
 
 # Mini-Tasks
 - ~~Parallelize and improve performance of attack script~~ Not needed! The main improvement came from the server side! Current attack takes under 5 minutes :)

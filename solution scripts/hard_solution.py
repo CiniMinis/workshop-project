@@ -57,7 +57,7 @@ class HardAttacker(Attacker):
             print("Indecisive Results, Retrying")
             return self.find_part(part)
         
-        return fastest_cand
+        return sum_best
 
 if __name__ == '__main__':
-    print(HardAttacker.attack())
+    print(HardAttacker.attack(verbose=True))
