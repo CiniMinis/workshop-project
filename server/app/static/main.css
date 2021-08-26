@@ -200,3 +200,7 @@ canvas.avatar-big {
 #scrollTopBtn {
     opacity: 0;
 }
+
+#dnaToDraw {
+    font-size: 1.6vw !important;
+}
