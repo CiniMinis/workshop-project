@@ -30,5 +30,12 @@ function draw_dna(){
                 return draw_json_part(ctx, vals[0]);
             });
     }
-    last_promise.catch((err) => {console.log(err);});
+    last_promise.catch((error) => {
+        $("#errorZone").append(`
+            <div class="alert alert-danger alert-dismissible fade show flex-grow-1" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> ${error}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        `);
+    });
 }

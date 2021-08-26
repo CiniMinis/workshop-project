@@ -29,5 +29,5 @@
 - [x] Refresh leak_part_from_cache.py and in general all the solution scripts
 - [ ] Make proper documentation for everything!!!
 - [x] Difficulty adjusted text for homepage.
-- [ ] Improve draw DNA error handling.
+- [x] Improve draw DNA error handling.
 - [ ] Make a logo? Change up fonts?
