@@ -196,3 +196,7 @@ canvas.avatar-big {
 .query-user:hover > .color-dark {
     color: var(--highlight-color) !important;
 }
+
+#scrollTopBtn {
+    opacity: 0;
+}

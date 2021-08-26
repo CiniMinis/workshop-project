@@ -18,3 +18,18 @@ $().ready(()=>{
 
     draw_all_avatars();
 });
+
+$(window).scroll(function() {
+    toggle_top_button_margin = 100;
+    animation_len = 500;
+    console.log($(window).scrollTop());
+    console.log($("#scrollTopBtn").data("visible"));
+    // check if bottom of page is reached
+    if ($(window).scrollTop() > toggle_top_button_margin && ! $("#scrollTopBtn").data("visible")) {
+        $("#scrollTopBtn").data("visible", true);
+        $("#scrollTopBtn").animate({ "opacity": "1" }, animation_len);
+    } else if ($(window).scrollTop() < toggle_top_button_margin && $("#scrollTopBtn").data("visible")) {
+        $("#scrollTopBtn").data("visible", false);
+        $("#scrollTopBtn").animate({ "opacity": "0" }, animation_len);
+    }
+});
