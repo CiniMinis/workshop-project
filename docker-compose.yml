@@ -6,6 +6,8 @@ services:
     secrets:
       - db_password
       - session_key
+      - medium_difficulty_key
+      - ctf_flag
     ports: 
       - "5000:5000"
     volumes:
@@ -15,6 +17,8 @@ services:
     environment: 
       - DB_PASSWORD_FILE=/run/secrets/db_password
       - SESSION_KEY_FILE=/run/secrets/session_key
+      - AES_SESSION_KEY_FILE=/run/secrets/medium_difficulty_key
+      - CTF_FLAG_FILE=/run/secrets/ctf_flag
     depends_on: 
       - db
   
@@ -37,4 +41,8 @@ secrets:
     file: './database_password.secret'
   session_key:
     file: './session_key.secret'
+  medium_difficulty_key:
+    file: './medium_difficulty_key.secret'
+  ctf_flag:
+    file: './flag.secret'
   

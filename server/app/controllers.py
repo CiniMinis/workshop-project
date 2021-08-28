@@ -79,10 +79,13 @@ def check_villain_dna():
     session_villain = Villain.get_session_villain()
     
     if session_villain.dna == submitted_dna:
-        flag = os.environ.get('FLAG')
-        if flag is None:
+        flag_path = os.environ.get('CTF_FLAG_FILE')
+        if flag_path is None:
             from instance import FLAG
             flag = FLAG
+        else:
+            with open(flag_path, 'r') as flag_file:
+                flag = flag_file.read()
         return render_template("check_challenge.jinja", win=True, message="The Flag Is: {}".format(flag))
     else:
         session_villain.shapeshift()

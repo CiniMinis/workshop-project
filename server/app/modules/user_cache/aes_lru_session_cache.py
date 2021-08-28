@@ -8,9 +8,15 @@ class AesLRUSessionCache(LRUSessionCache):
     SEPARATOR = b','
 
     def __init__(self, key=None, mode=AES.MODE_CTR, *args, **kwargs):
-        if key is None:
+        key_path = os.environ.get('AES_SESSION_KEY_FILE')
+        if key is not None:
+            self.key = key
+        elif key_path is not None:
+            with open(key_path, 'rb') as key_file:
+                self.key = key_file.read()
+        else:
             key = os.urandom(self.DEFAULT_KEY_LENGTH)
-        self.key = key
+        
         self.mode = mode
         super().__init__(*args, **kwargs)
 

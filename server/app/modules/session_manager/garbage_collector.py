@@ -80,7 +80,7 @@ class SessionGarbageCollector(SessionHandler):
     def _update_session(self, ssid):
         connection_row = self.SessionTable.query.filter_by(ssid=ssid).first()
         if connection_row is None:
-            self._add_session(ssid)
+            SessionHandler.trigger_event(SessionEvent.CREATE, ssid)
             return
 
         try:
