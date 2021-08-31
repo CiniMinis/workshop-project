@@ -92,7 +92,7 @@ class Villain(db.Model):
     __tablename__ = 'villains'
 
     _SESSION_HANDLER = SessionHandler()
-    MAX_DETECTIONS = 256    # the maximal number of queries until the villain shapeshifts
+    MAX_DETECTIONS = 5    # the maximal number of queries until the villain shapeshifts
     _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs
@@ -123,8 +123,8 @@ class Villain(db.Model):
 
     def notify_detection(self):
         """Update the session-villain's detection counter"""
-        self.detections = Villain.__table__.columns.detections + 1  # atomic inc
         cur_detections = Villain.query.filter(Villain.ssid==self.ssid).first().detections
+        self.detections = Villain.__table__.columns.detections + 1  # atomic inc
         db.session.commit()  # refresh data against db for accurate cur_detections
         if cur_detections == self.MAX_DETECTIONS or \
             self.detections > self.MAX_DETECTIONS + self._EMERGENCY_OVER:   # failsafe

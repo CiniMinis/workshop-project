@@ -1,20 +1,13 @@
+"""
+    A solution for the medium challenge, an encrypted user-side cache
+"""
+
 from attack_util import *
+from easy_solution import EasyAttacker
 from itertools import product
 
-class MediumAttacker(Attacker):
-    CACHE_NAME = 'cache_for_part_to_dict'
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.empty_cookie = self.session_cookie
-    
-    def flush_cache(self):
-        self.session_cookie = self.empty_cookie
-    
-    @property
-    def session_cache(self):
-        return self.get_cookie_data(self.CACHE_NAME)
-    
+class MediumAttacker(EasyAttacker):
+    """The attacker script for the medium challenge, extend EasyAttacker"""
     def find_part(self, part):
         self.flush_cache()
         self.leak_user_part_to_cache(part)

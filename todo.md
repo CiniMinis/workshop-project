@@ -13,7 +13,7 @@
 - [x] Create cosmetics/story for website
 - [x] Package difficulties
 - [x] Make configurations for production ~~and testing~~
-- [ ] Playtests!
+- [ ] ~~Playtests!~~ Didn't receive approval to do so.
 - [x] Containerize for deployment and run using standalone (WSGI container)
 
 # Mini-Tasks
@@ -27,7 +27,7 @@
 - [x] Rename title in base template
 - [x] Double check DNA conversion works for sequences non divisible by 2 (it's late right now, I don't trust myself)
 - [x] Refresh leak_part_from_cache.py and in general all the solution scripts
-- [ ] Make proper documentation for everything!!!
+- [x] Make proper documentation for everything!!!
 - [x] Difficulty adjusted text for homepage.
 - [x] Improve draw DNA error handling.
 - [x] ~~Make a logo?~~ (logo is impractical) Change up fonts?

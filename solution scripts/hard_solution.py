@@ -1,12 +1,26 @@
+"""
+    The solution script for the hard challenge, a server-side cache.
+"""
 from tqdm import tqdm
 from attack_util import *
 from itertools import product
 
 
 class HardAttacker(Attacker):
-    MAX_CACHE_SIZE = 64
-    DISPLAY_AMOUNT = 10
-    DEFAULT_MEASURE_COUNT = 5
+    """The attacker code for the hard challenge
+
+    Extends the Attacker class, so all attributes there apply.
+
+    Attributes:
+        pedantic (bool): if True, enforces that the fastest response and the 
+            overall fastest time were both achieved by the same part (restarts).
+            Otherwise returns the part with fastest time, Defaults to False.
+        reps (int): the number of measurement repetitions to make for each part
+            in the attack. Defaults to DEFAULT_MEASURE_COUNT.
+    """
+    MAX_CACHE_SIZE = 64     # the maximal cache size for this challenge
+    DISPLAY_AMOUNT = 10     # amount of top results to show in verbose mode
+    DEFAULT_MEASURE_COUNT = 5   # the default amount of timing measurements to make
     
     def __init__(self, pedantic=False, reps=DEFAULT_MEASURE_COUNT, *args, **kwargs):
         self.pedantic = pedantic
@@ -57,7 +71,7 @@ class HardAttacker(Attacker):
             print("Indecisive Results, Retrying")
             return self.find_part(part)
         
-        return sum_best
+        return fastest_cand
 
 if __name__ == '__main__':
     print(HardAttacker.attack(verbose=True))
