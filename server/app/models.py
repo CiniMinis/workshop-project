@@ -1,3 +1,7 @@
+"""
+    The application's models (MCV app setup).
+    Configures database tables and configurations
+"""
 from sqlalchemy import literal
 from app.config.avatar import Avatar
 from app import db
@@ -6,13 +10,12 @@ from .modules.session_manager import SessionHandler
 import random
 
 def choose_with_prob(cand1, cand2, prob1):
-    """
-        Choose one of two options with given probability
-    """
+    """Choose one of two options with given probability for cand1"""
     choice_weights = [prob1, 1 - prob1]
     return random.choices((cand1, cand2), choice_weights)[0]
 
 class User(db.Model):
+    """Database model for genetwork's users"""
     __tablename__ = 'users'
     # internal user id for database
     user_id = db.Column(db.Integer, primary_key=True)
@@ -31,10 +34,18 @@ class User(db.Model):
 
 
 class UserFactory:
+    """Factory for creating random users
+    
+    Attributes:
+        faker (Faker): a Faker instance for name generation.
+            automatically created.
+        avatar_cls (type): a sublass of AvatarBase (from avatar module)
+            which represents the avatar of the generated users.
+    """
     # constants for random user generation
-    JOB_PROB = 0.75
-    LOCATION_PROB = 0.5
-    PRIVATE_PROB = 0.3
+    JOB_PROB = 0.75 # probability for the user showing a job
+    LOCATION_PROB = 0.5 # probability for the user showing a location
+    PRIVATE_PROB = 0.3  # probability for the user being private (hiding DNA)
 
     def __init__(self, avatar_cls):
         self.faker = Faker()
@@ -57,6 +68,7 @@ class UserFactory:
     def _dna_randomizer(self):
         return self.avatar_cls.randomize().to_dna()
 
+    """dictionary which maps user properties to random generators for them"""
     randomizers = {
         'name': _name_randomizer,
         'job': _job_randomizer,
@@ -66,15 +78,21 @@ class UserFactory:
     }
 
     def randomize(self):
+        """Create a random user
+
+        Returns:
+            User: a user with a randomized avatar and random faked parameters
+        """
         random_vals = {key: rand(self) for key, rand in self.randomizers.items()}
         return User(**random_vals)
 
 
 class Villain(db.Model):
+    """Database model for the villains for each session"""
     __tablename__ = 'villains'
 
     _SESSION_HANDLER = SessionHandler()
-    MAX_DETECTIONS = 256
+    MAX_DETECTIONS = 256    # the maximal number of queries until the villain shapeshifts
     _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs
@@ -98,11 +116,13 @@ class Villain(db.Model):
     _DNA_RANDOMIZER = lambda: UserFactory.randomizers['dna'](Villain._USER_FACTORY)
 
     def shapeshift(self):
+        """Changes the villains DNA and resets it's detections"""
         self.dna = Villain._DNA_RANDOMIZER()
         self.detections = 0
         db.session.commit()
 
     def notify_detection(self):
+        """Update the session-villain's detection counter"""
         self.detections = Villain.__table__.columns.detections + 1  # atomic inc
         cur_detections = Villain.query.filter(Villain.ssid==self.ssid).first().detections
         db.session.commit()  # refresh data against db for accurate cur_detections
@@ -113,6 +133,15 @@ class Villain(db.Model):
     
     @staticmethod
     def is_villain(user):
+        """Checks if the given user is a villain.
+
+        This function works by checking all the faked user-columns
+        and making sure each exists and all attributes are identical.
+        If all the checks passed, the user is classified as a villain.
+
+        Returns:
+            bool: True if the user was classified a villain, false otherwise.
+        """
         for col, fake_val in Villain.FAKE_COLS.items():
             if not hasattr(user, col):
                 return False
@@ -122,11 +151,13 @@ class Villain(db.Model):
 
     @staticmethod
     def get_session_villain():
+        """Returns the current session's villain"""
         cur_ssid = Villain._SESSION_HANDLER.ssid
         return Villain.query.filter_by(ssid=cur_ssid).first()
 
     @classmethod
     def get_user_columns(cls):
+        """Generates fake columns to make villains match the User class"""
         user_col_names = [col.key for col in User.__table__.columns]
         fake_columns = []
         for col_name in user_col_names:
@@ -154,10 +185,17 @@ class Villain(db.Model):
         db.session.commit()
 
 class FakeQueryMeta(type):
-    FAKE_QUERY_FUNC_NAME = "fake_query"
+    """Metaclass which allows a class to fake being a table!
+
+    This metaclass given a query returning function, adds a fake static
+    parameter with a custom query which fakes the SQLAlchemy QueryAPI.
+    This can be used to create dynamic flask-sqlalchemy table lookalikes.
+    """
+    FAKE_QUERY_FUNC_NAME = "fake_query" # the name for the faked query method
 
     @property
     def query(cls):
+        """QueryAPI faking for the database"""
         query_func = getattr(cls, cls.FAKE_QUERY_FUNC_NAME, None)
         if callable(query_func):
             return query_func()
@@ -166,6 +204,11 @@ class FakeQueryMeta(type):
 
 
 class SessionUsers(metaclass=FakeQueryMeta):
+    """Table lookalike which holds all genetwork members for the session
+
+    This is a faked flask-sqlalchemy table which dynamically adds the villain
+    of the current session to the static filler-users in the genetwork page
+    """
     _SESSION_HANDLER = SessionHandler()
 
     # References to the User columns
@@ -179,10 +222,11 @@ class SessionUsers(metaclass=FakeQueryMeta):
 
     @classmethod
     def fake_query(cls):
+        """Generate the query for the fake QueryAPI"""
         static_users = User.query
         try:
             ssid = cls._SESSION_HANDLER.ssid
             relevant_villains = db.session.query(*Villain.get_user_columns()).filter(Villain.ssid==ssid)
             return relevant_villains.union(static_users)
-        except ValueError:
+        except ValueError:  # if no session exists, no villain exists.
             return static_users

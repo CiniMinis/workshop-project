@@ -1,3 +1,9 @@
+"""
+    The application's API
+    Handles all queries with prefix /api/ which are responses to javascript
+    ajax from the user for updating pages.
+    Primarily uses a json format.
+"""
 from app.models import SessionUsers, Villain
 from flask import jsonify, request, Blueprint, render_template, current_app
 from app.config.avatar import Avatar
@@ -8,17 +14,32 @@ import json
 import os.path
 
 api = Blueprint('api', __name__, url_prefix='/api', template_folder="views/snippets")
-caching_function = current_app.config['CACHING_TYPE']
+caching_function = current_app.config['CACHING_TYPE']   # the configured application page
 
 # general API consts
-URL_PART_TEMPLATE = "/img/avatar/{}/"
-FILE_DIR = os.path.abspath(os.path.dirname(__file__))
-URL_TO_PATH_PREFIX = os.path.join(FILE_DIR, 'static') 
+URL_PART_TEMPLATE = "/img/avatar/{}/"   # string template for the url for part assets
+FILE_DIR = os.path.abspath(os.path.dirname(__file__))   # the current directory
+URL_TO_PATH_PREFIX = os.path.join(FILE_DIR, 'static')
+"""Prefix which convers URL part assets to concrete files in the system"""
 
+USERS_TO_ADD = 8    # The number of users sent on a deck request
 
 def make_json_api(*args, **kwargs):
+    """Decorator for turning functions and async coroutines to an API format
+    
+    This decorates the functions/coroutines to return a JSON with two fields,
+    a `status` field which handles wether the request failed or not, and a
+    a `content` field which stores the response on success and the error message
+    if failed.
+    
+    Args:
+        *args:  args for flask routing within the api
+        **kwargs:   keyword args for flask routing within the api
+    """
     def decorator(func):
         CAUGHT_ERRORS = (ValueError, AssertionError, KeyError, TypeError)
+        
+        # handles the sync case
         @wraps(func)
         def sync_decorated(*args, **kwargs):
             resp = {'status': 'success'}
@@ -30,6 +51,7 @@ def make_json_api(*args, **kwargs):
             
             return jsonify(**resp)
 
+        # handles the async case
         @wraps(func)
         async def async_decorated(*args, **kwargs):
             resp = {'status': 'success'}
@@ -41,11 +63,13 @@ def make_json_api(*args, **kwargs):
             
             return jsonify(**resp)
         
+        # return the matching case
         if asyncio.iscoroutinefunction(func):
             decorated = async_decorated
         else:
             decorated = sync_decorated
         
+        # add routing to function
         api.add_url_rule(*args, **kwargs, view_func=decorated)
 
         return decorated
@@ -53,6 +77,14 @@ def make_json_api(*args, **kwargs):
 
 @caching_function(serializer=json)
 def part_to_dict(part):
+    """Converts a body part to a dict of drawing properties for the js
+    
+    This is indended to be used in a make_json_api context where the dicts
+    will be converted to JSON, making the response solid JSON.
+    
+    Note:
+        This function is cached.
+    """
     part_name = part.__class__.__name__.lower()
     part_url = URL_PART_TEMPLATE.format(part_name)
 
@@ -73,6 +105,17 @@ def part_to_dict(part):
 
 @make_json_api('part_from_dna', methods=['POST'])
 def part_from_dna():
+    """API call which returns part_dict of a part from given DNA
+
+    Note:
+        Parameters `dna` and `part` are posted to the request
+
+    Raises:
+        ValueError: Missing parameters from API request
+
+    Returns:
+        dict: part_dict of drawing details for the requested body part
+    """
     if 'dna' not in request.form:
         raise ValueError("Missing dna parameter")
     if 'part' not in request.form:
@@ -84,6 +127,18 @@ def part_from_dna():
 
 
 async def fetch_part_from_user(uid, part_name):
+    """gets a body part data from a user
+
+    Args:
+        uid (int): the id of the requested user
+        part_name (str): the name of the body part for which data is requested
+
+    Raises:
+        ValueError: Missing parameters from API request
+
+    Returns:
+        dict: part_dict of drawing details for the requested body part
+    """
     user = SessionUsers.query.filter_by(user_id=uid).first()
     if user is None:
         raise ValueError("User id not found")
@@ -92,13 +147,24 @@ async def fetch_part_from_user(uid, part_name):
 
 
 async def is_user_visible(uid):
+    """Checks if the requester is permitted to view a user's DNA
+
+
+    Args:
+        uid (int): the id of the requested user
+
+    Returns:
+        bool: True if requester is allowed, False otherwise
+    """
     user = SessionUsers.query.filter_by(user_id=uid).first()
+    # This Raven Darksomething asked us to let her know when she is being queried
+    # weird, but she pays well...
     if Villain.is_villain(user):
         villain = Villain.get_session_villain()
         villain.notify_detection()
     if not user.is_private:
         return True
-    # TODO: Implement friend check to show avatar to friends
+    # GENETWORK: add user whitelisting before full release of genetwork
     return False
 
 
@@ -119,10 +185,9 @@ async def part_from_user():
 
     return part
 
-# Consts for user deck
-USERS_TO_ADD = 8
 
 @api.route('get_user_deck')
 def get_user_deck():
+    """Returns html for new users being add to a list"""
     new_users = SessionUsers.query.order_by(func.random()).limit(USERS_TO_ADD).all()
     return render_template("users_as_list_items.jinja", users=new_users)

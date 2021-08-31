@@ -1,30 +1,42 @@
+"""
+    The application's controllers (MCV)
+    Gets all incoming html page requests and processes them.
+    
+    Note:
+        This module does not handle the api calls to the module.
+"""
 from flask import send_from_directory, render_template, Blueprint, abort, request, current_app
 from sqlalchemy.sql.expression import func
 from app.models import SessionUsers, Villain
 import os
 
 # directory constants
-STATIC_DIR = "static"
-IMAGE_DIR = "static/img"
+STATIC_DIR = "static"   # path for static files folder
+IMAGE_DIR = "static/img"    # path for images folder
 
-# display constants
-INITIAL_EXPLORE_COUNT = 16
+INITIAL_EXPLORE_COUNT = 16  # The initial number of users shown in the explore view
 
 controllers = Blueprint('controllers', __name__, template_folder="views")
 
 
 @controllers.route('/img/<path:image>')
 def images(image):
+    """Handles image queries"""
     return send_from_directory(IMAGE_DIR, image)
 
 
 @controllers.route('/static/<path:path>')
 def static_files(path):
+    """Handles queries for static files"""
     return send_from_directory(STATIC_DIR, path)
 
 
 @controllers.route('/', methods=['GET', 'POST'])
 def home():
+    """Homepage
+    
+    POST requests are user search requests from the search bar
+    """
     if request.method == 'GET':
         if 'INDEX_PAGE_TEMPLATE' in current_app.config:
             return render_template(current_app.config['INDEX_PAGE_TEMPLATE'])
@@ -52,11 +64,13 @@ def home():
 
 @controllers.route('/explore')
 def explore():
+    """The explore users page"""
     explore_users = SessionUsers.query.order_by(func.random()).limit(INITIAL_EXPLORE_COUNT).all()
     return render_template("explore.jinja", users=explore_users)
 
 @controllers.route('/user/<int:uid>')
 def show_user(uid):
+    """The profile pages of users"""
     user = SessionUsers.query.filter_by(user_id=uid).first()
     if user is None:
         abort(404)
@@ -65,10 +79,12 @@ def show_user(uid):
 
 @controllers.route('/draw')
 def draw_page():
+    """The draw from DNA page"""
     return render_template("draw.jinja")
 
 @controllers.route('/check_challenge', methods=['GET', 'POST'])
 def check_villain_dna():
+    """Handles challenge submition checking"""
     if request.method == 'GET':
         return render_template("check_challenge.jinja")
     
