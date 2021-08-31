@@ -8,10 +8,19 @@ import time
 
 
 class SessionGarbageCollector(SessionHandler):
+    """Garbage collector for inactive sessions
+
+
+    Attributes:
+        session_duration (int): the time in seconds between session
+            garbage collector scans.
+        clean_interval (int): the maximal lifetime of an inactive session in seconds.
+            Defines the time an app needs to be inactive in order for it to be garbage collected.
+    """
     _next_gc_id = 0
-    DB_BIND = "active_sessions"
-    TABLE_TEMPLATE = "GC_{}"
-    DB_NAME = "active_sessions"
+    DB_BIND = "active_sessions" # the flask-sqlalchemy bind for the garbage collector db
+    TABLE_TEMPLATE = "GC_{}"    # a string format for the table name for a garbage collector
+    DB_NAME = "active_sessions" # the database table name for the garbage collector
     
     def __init__(self, session_duration, clean_interval):
         self.session_duration = timedelta(seconds=session_duration)
@@ -55,6 +64,7 @@ class SessionGarbageCollector(SessionHandler):
         
     
     def start(self):
+        """Starts the garbage collection thread"""
         self.started = True
         # start the garbage collection thread with the context of the first request
         loop_with_context = copy_current_request_context(SessionGarbageCollector._loop_collector)
@@ -80,6 +90,10 @@ class SessionGarbageCollector(SessionHandler):
     def _update_session(self, ssid):
         connection_row = self.SessionTable.query.filter_by(ssid=ssid).first()
         if connection_row is None:
+            """
+                if the session is actually an old session which was removed,
+                it needs to be recreated
+            """
             SessionHandler.trigger_event(SessionEvent.CREATE, ssid)
             return
 

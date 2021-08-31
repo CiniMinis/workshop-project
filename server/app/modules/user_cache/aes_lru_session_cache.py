@@ -1,11 +1,29 @@
+"""
+    A flask-session based user caching solution which encrypts the function
+    inputs and outputs with AES.
+"""
+
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from .lru_session_cache import LRUSessionCache
 import os
 
 class AesLRUSessionCache(LRUSessionCache):
-    DEFAULT_KEY_LENGTH = 32
-    SEPARATOR = b','
+    """Decorator, an AES encrypted LRU caching solution for functions.
+    
+    Attributes:
+        key (bytes, optional): an AES private key to be used. If missing or
+            None, attempts to fetch an AES key from the file specified in the
+            `AES_SESSION_KEY_FILE` environment variable, and if all fails, randomly
+            generate a key.
+        mode: an AES mode of operation ot be used. Defaults to CTR.
+
+    Note:
+        This class extends the LRUSessionCache solution, and all attributes
+        and requirements there apply too.
+    """
+    DEFAULT_KEY_LENGTH = 32     # the byte length of a generated AES key
+    SEPARATOR = b','    # The seperator used between the IV and ciphertext
 
     def __init__(self, key=None, mode=AES.MODE_CTR, *args, **kwargs):
         key_path = os.environ.get('AES_SESSION_KEY_FILE')

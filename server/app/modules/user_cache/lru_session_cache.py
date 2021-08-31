@@ -1,12 +1,31 @@
+"""
+    A flask-session based user caching solution.
+    Used as a base on which other solutions expand.
+"""
+
 from flask import session
 from functools import wraps
 import time
 
 
-
 class LRUSessionCache:
-    CACHE_NAME_TEMPLATE = "cache_for_{}"
-    DEFAULT_SIZE = 10
+    """A per-session lru function caching solution based on flask-sessions.
+    
+    This class should be used as a function decorator in front of the function to cache.
+    
+    Note:
+        Cached functions should returns strings or a serializer to string should be supplied.
+
+    Attributes:
+        max_size (int): the size limit of the LRU cache in entry number.
+            if None is supplied, sets to the class default size.
+        serializer (object, optional): an optional serializer for serializing
+            the cached function's outputs to strings. A serializer should support
+            a `dumps` and `loads` functions which serialize outputs to strings and
+            deserialize these strings back to the correct values respectively.
+    """
+    CACHE_NAME_TEMPLATE = "cache_for_{}"    # template for cache naming
+    DEFAULT_SIZE = 10   # default size of the LRU cache
 
     def __init__(self, max_size=None, serializer=None):
         if max_size is None:
@@ -38,6 +57,7 @@ class LRUSessionCache:
         return None
 
     def set_modified(self):
+        """Makes sure the flask-session updates the cache"""
         session[self.cache_name] = self._cache
 
     def __call__(self, func):

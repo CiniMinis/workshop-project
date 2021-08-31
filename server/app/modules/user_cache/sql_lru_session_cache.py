@@ -1,3 +1,8 @@
+"""
+    A server side, SQL based per-user caching solution.
+    Assumes a SessionHandler is attached to the flask app (SessionIDs are required).
+"""
+
 from app import db
 from flask import current_app
 from sqlalchemy.sql import func
@@ -9,10 +14,22 @@ import os
 
 
 class SqlLRUSessionCache(LRUSessionCache):
-    DEFAULT_SIZE = 64
-    DB_NAME = "sql_sessions"
-    BIND_NAME = "sql_sessions"
-    TABLE_NAME_TEMPLATE = "sql_session_cache_{}"
+    """A decorator, an server side LRU per-session caching solution.
+
+    Attributes:
+        index (int): a unique index for the SQL table.
+            Used for table identification within the database.
+        CacheRecord (db.Model): the flask-sqlalchemy table object
+            which stores all cached values.
+
+    Note:
+        This class extends the LRUSessionCache solution, and all attributes
+        and requirements there apply too.
+    """
+    DEFAULT_SIZE = 64   # The default LRU cache size
+    DB_NAME = "sql_sessions"    # the name for the sessions' database
+    BIND_NAME = "sql_sessions"  # the flask-sqlalchemy bind name for the sessions' database
+    TABLE_NAME_TEMPLATE = "sql_session_cache_{}"    # a string format template for table names
     _DECLARED_SESSION_CACHES = []
     _SESSION_HANDLER = SessionHandler()
 
@@ -57,10 +74,12 @@ class SqlLRUSessionCache(LRUSessionCache):
     
     @property
     def table_name(self):
+        """str: the name of the table used for caching in the database"""
         return self.TABLE_NAME_TEMPLATE.format(self.index)
     
     @property
     def current_ssid(self):
+        """str: the current userid being handled, used for clearness only"""
         return self._SESSION_HANDLER.ssid
     
     @property
@@ -70,8 +89,6 @@ class SqlLRUSessionCache(LRUSessionCache):
         return cache
     
     def _store(self, key, value):
-        # NOTE: for some reason, the following NORMAL query issues a delete failure somehow?
-        # This is just a query and the bug seems to relate to many parallel queries somehow
         record = self.CacheRecord.query.filter_by(ssid=self.current_ssid, cache_key=key).first()
         if record is None:
             db.session.add(
@@ -110,6 +127,7 @@ class SqlLRUSessionCache(LRUSessionCache):
         return (record.last_access, record.cache_value)
     
     def set_modified(self):
+        """Disabling the inherited set_modified function. Not required."""
         pass
     
     def __call__(self, func):
