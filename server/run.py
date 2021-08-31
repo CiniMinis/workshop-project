@@ -1,9 +1,13 @@
-from app import create_app
-from app.config.avatar import Avatar
+"""
+    Runs the app.
+    This is only for manual execution and must not be used in production!
+"""
 
+from app import create_app
+
+DEPLOY_TYPE = 'prod'
+CHALLENGE_TYPE = 'hard'
 
 if __name__ == '__main__':
-    app = create_app(deploy_type='dev', challenge_type='hard')
-    # Sometimes to test /draw getting a dna sequence is nice
-    print(Avatar.randomize().to_dna())
+    app = create_app(deploy_type=DEPLOY_TYPE, challenge_type=CHALLENGE_TYPE)
     app.run(host="0.0.0.0")

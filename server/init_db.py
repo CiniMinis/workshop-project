@@ -1,9 +1,12 @@
+"""
+    Small script for dropping all app tables and users and
+    recreating them.
+    Supplied as a utility but no longer necessary for user generation.
+"""
 from app.models import UserFactory, User
 from app.config.avatar import Avatar
+from app.config import USER_COUNT
 from app import db, create_app
-
-# table creation consts
-USER_COUNT = 128
 
 # debugging consts
 SHOULD_DISPLAY = False

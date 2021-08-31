@@ -1,3 +1,7 @@
+"""
+    List of 64 selected color names for the avatar module
+"""
+
 COLOR_NAMES = [
     "red",
     "salmon",
