@@ -140,6 +140,7 @@ async def fetch_part_from_user(uid, part_name):
         dict: part_dict of drawing details for the requested body part
     """
     user = SessionUsers.query.filter_by(user_id=uid).first()
+    current_app.db.session.commit()
     if user is None:
         raise ValueError("User id not found")
     avatar = Avatar.from_dna(user.dna)

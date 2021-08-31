@@ -6,8 +6,8 @@
 from app import create_app
 
 DEPLOY_TYPE = 'prod'
-CHALLENGE_TYPE = 'hard'
+DIFFICULTY = 'hard'
 
 if __name__ == '__main__':
-    app = create_app(deploy_type=DEPLOY_TYPE, challenge_type=CHALLENGE_TYPE)
+    app = create_app(deploy_type=DEPLOY_TYPE, difficulty=DIFFICULTY)
     app.run(host="0.0.0.0")

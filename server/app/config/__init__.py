@@ -83,7 +83,7 @@ class ProductionDeployment(DeploymentConfig):
     if _db_pass_path is not None:
         with open(_db_pass_path, 'r') as _db_pass_file:
             _db_pass = _db_pass_file.read()
-        SQLALCHEMY_DATABASE_URI = f'postgresql://genetwork:{_db_pass}@db/{DB_NAME}'     
+        SQLALCHEMY_DATABASE_URI = f'postgresql://genetwork:{_db_pass}@db/{DB_NAME}'
 
 class CacheConfig(ABC):
     """Abstract base class for configuration of the different user caches
