@@ -171,6 +171,16 @@ async def is_user_visible(uid):
 
 @make_json_api('part_from_user', methods=['POST'])
 async def part_from_user():
+    """API call which returns part_dict of a users part
+    
+    Gets a userid and body part from form
+
+    Raises:
+        ValueError: Bad parameters or forbidden
+
+    Returns:
+        dict: dictionary of drawing instructions for the part
+    """
     if 'id' not in request.form:
         raise ValueError("Missing user id parameter")
     if 'part' not in request.form:
