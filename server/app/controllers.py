@@ -1,5 +1,5 @@
 """
-    The application's controllers (MCV)
+    The application's controllers (MVC)
     Gets all incoming html page requests and processes them.
     
     Note:

@@ -1,5 +1,5 @@
 """
-    The application's models (MCV app setup).
+    The application's models (MVC app setup).
     Configures database tables and configurations
 """
 from sqlalchemy import literal
