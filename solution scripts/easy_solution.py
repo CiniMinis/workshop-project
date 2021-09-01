@@ -35,4 +35,4 @@ class EasyAttacker(Attacker):
         return part_repr_to_bits(cache_key[1:-2])
     
 if __name__ == '__main__':
-    print(EasyAttacker.attack())
+    print(EasyAttacker.attack(verbose=True))

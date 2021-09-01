@@ -20,4 +20,4 @@ class MediumAttacker(EasyAttacker):
                 return cand_bitstring
     
 if __name__ == '__main__':
-    print(MediumAttacker.attack())
+    print(MediumAttacker.attack(verbose=True))

@@ -218,6 +218,27 @@ class Attacker(ABC):
             NotImplementedError: method wasn't overwritten properly
         """
         raise NotImplementedError
+    
+    def submit_solution(self, dna):
+        """Submits the dna solution to the server
+        
+        Args:
+            dna (str): The DNA string to submit as the answer
+
+        Returns:
+            str: The response string
+        """
+        request_cookies = {self.SESSION_COOKIE: self.session_cookie}
+        
+        resp = requests.post(f"{self.server}/check_challenge", data = {
+            'dna': dna
+        }, cookies=request_cookies)
+        
+        html = resp.text
+        _, after_answer_start = html.split('<p class=\"lead typewriter\">')
+        answer = after_answer_start.split('</p>')[0]
+
+        return answer.strip()
 
     @classmethod
     def attack(cls, *args, **kwargs):
@@ -228,17 +249,11 @@ class Attacker(ABC):
             **kwargs:   keyword arguments for the attacker constructor
 
         Returns:
-            str: The victim's DNA
+            str: The answer to the submition attempt of the uncovered DNA
         """
-        # get session data or create it
-        session_cookie = input('Insert your session cookie: ')
-        if len(session_cookie) == 0:
-            session_cookie = None
 
         # make attacker for session
-        attacker = cls(session_cookie=session_cookie, *args, **kwargs)
-        if session_cookie is None:
-            attacker.fancy_print(f"Started a new session", important=True)
+        attacker = cls(session_cookie=None, *args, **kwargs)
         
         # attack all parts and assemble 
         start = time.time()
@@ -253,7 +268,7 @@ class Attacker(ABC):
 
         attack_minutes = (end - start) / 60
         attacker.fancy_print(f"Recovered DNA - {user_dna}, using {attacker.queries} queries and {attack_minutes:f} minutes")
-        if session_cookie is None:
-            attacker.fancy_print(f"The new session's cookie is {attacker.session_cookie}", important=True)
         
-        return user_dna
+        got_answer = attacker.submit_solution(user_dna)
+        
+        return got_answer
