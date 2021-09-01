@@ -274,5 +274,10 @@ Simply running the solution script of the relevant difficulty in python, will ex
 ### Using the Attacker Object
 Alternatively, you may explore the attackers and the attack possibilities using the attacker objects directly. Simply import the attacker type you would like to any python file and use the file as a library documented in these files.
 
+For quick usage of a customized attacker, a quick script can be written with `python -c`. For example here is a quick way to run an easy attacker with a customized server:
+```python
+python -c "from easy_solution import EasyAttacker; print(EasyAttacker.attack(server='http://your.server.url.and.port:1337'))"
+```
+
 ---
 Note: The hard difficulty attacker is, as mentioned prior, a timing based attacker. Currently it is configured to run a very fast attack which is reliable on my setup. Depending on your setup, you may need to alters the reps parameter. 
