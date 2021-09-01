@@ -42,6 +42,27 @@ class HardAttacker(Attacker):
         print(f"Top {HardAttacker.DISPLAY_AMOUNT} by total time were:")
         for cand in sum_sorted_candidates[:HardAttacker.DISPLAY_AMOUNT]:
             print(f"Candidate: {cand}\t Total: {accumulated_times[cand]:f} sec.\tMeasurements: {measurements[cand]}")
+        
+    
+    def flush_cache_from_part(self, part):
+        """Flushes a specific body part type from the cache
+        
+        This is simply done by filling the cache with a body part of a
+        different type.
+
+        Args:
+            part (str): the name of the part to flush from the cache
+        """
+        if part == PART_ORDER[0]:
+            flush_part = PART_ORDER[1]
+        else:
+            flush_part = PART_ORDER[0]
+
+        # load arbitrary, elements of a different part to flush the original away
+        part_options = product('01', repeat=PART_TO_BITLEN[flush_part])
+        for _, bits in zip(range(self.MAX_CACHE_SIZE), part_options):
+            self.load_part_bits_to_cache(flush_part, ''.join(bits))
+    
     
     def find_part(self, part):
         candidates = [''.join(bits) for bits in product('01', repeat=PART_TO_BITLEN[part])]

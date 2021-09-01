@@ -92,9 +92,9 @@ def part_to_dict(part):
     assert os.path.isfile(URL_TO_PATH_PREFIX + border_image), f'Missing draw resource for part {URL_TO_PATH_PREFIX + border_image}'
     part_dict = {'border_image': border_image}
 
+    color_image = os.path.join(part_url, f"color{part.variation}.png")
     if part.IS_COLORABLE:
-        color_image = os.path.join(part_url, f"color{part.variation}.png")
-        assert os.path.isfile(URL_TO_PATH_PREFIX + border_image), f'Missing draw resource for part {color_image}'
+        assert os.path.isfile(URL_TO_PATH_PREFIX + color_image), f'Missing draw resource for part {color_image}'
         color_dict = {'image': color_image,
                       'color': part.color}
     else:

@@ -92,7 +92,7 @@ class Villain(db.Model):
     __tablename__ = 'villains'
 
     _SESSION_HANDLER = SessionHandler()
-    MAX_DETECTIONS = 5    # the maximal number of queries until the villain shapeshifts
+    MAX_DETECTIONS = 256    # the maximal number of queries until the villain shapeshifts
     _EMERGENCY_OVER = 5
 
     # ssid of user to which the villain belongs

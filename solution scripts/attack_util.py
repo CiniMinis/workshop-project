@@ -204,25 +204,6 @@ class Attacker(ABC):
         
         return self._post_and_update(f"{self.server}/api/part_from_dna", data=request_params, cookies=request_cookies)
     
-    def flush_cache_from_part(self, part):
-        """Flushes a specific body part type from the cache
-        
-        This is simply done by filling the cache with a body part of a
-        different type.
-
-        Args:
-            part (str): the name of the part to flush from the cache
-        """
-        if part == PART_ORDER[0]:
-            flush_part = PART_ORDER[1]
-        else:
-            flush_part = PART_ORDER[0]
-
-        # load arbitrary, elements of a different part to flush the original away
-        part_options = product('01', repeat=PART_TO_BITLEN[flush_part])
-        for _, bits in zip(range(Attacker.MAX_CACHE_SIZE), part_options):
-            self.load_part_bits_to_cache(flush_part, ''.join(bits))
-    
     @abstractmethod
     def find_part(self, part):
         """Finds the body part bitstring of a part of the target's
