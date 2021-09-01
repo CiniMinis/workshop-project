@@ -243,7 +243,7 @@ The views utilize [the Jinja template engine](https://jinja.palletsprojects.com/
 **Note:** The challenge should show the code main API code and the relevant user cache. Otherwise there is no way to know the speculative execution exists. Choosing how much code to show is left for the CTF admins to decide, but note that showing how the difficulties change gives a massive hint.
 
 ## The Attack
-The main vulnerability's concept (the leak to cache) was described in the [Planning The Attack section](#planning-the-attack), and the specific manifestation of it in the website was described in the (API section)[#api]. Additionally, the potential attack for each user cache were described in the [User Cache section](#user-cache).
+The main vulnerability's concept (the leak to cache) was described in the [Planning The Attack section](#planning-the-attack), and the specific manifestation of it in the website was described in the [API section](#api). Additionally, the potential attack for each user cache were described in the [User Cache section](#user-cache).
 
 To put it all together, assuming all steps of the attack work as described, the API vulnerability is used to leak a body part of the target user's to the attacker's cache. Then, the attack against the user cache which matches the challenge's difficulty is used to leak the body part from the cache.
 This way, we can leak the villain's DNA part by part (pun intended).
