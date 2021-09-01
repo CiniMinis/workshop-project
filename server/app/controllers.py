@@ -9,6 +9,7 @@ from flask import send_from_directory, render_template, Blueprint, abort, reques
 from sqlalchemy.sql.expression import func
 from app.models import SessionUsers, Villain
 import os
+import time
 
 # directory constants
 STATIC_DIR = "static"   # path for static files folder
@@ -88,6 +89,7 @@ def check_villain_dna():
     if request.method == 'GET':
         return render_template("check_challenge.jinja")
     
+    time.sleep(1)   # ensures this method can't be bruteforced realistically
     submitted_dna = request.form.get('dna')
     if submitted_dna is not None:
         submitted_dna = submitted_dna.strip()

@@ -315,7 +315,7 @@ class AvatarBase(ABC):
     
     @classmethod
     def register_part(cls, part):
-        """Registers a body part to the avatar class.
+        """Decorator. Registers a body part to the avatar class.
 
         Registration should occur before any avatar instances are created!
 

@@ -20,6 +20,14 @@ class DeploymentConfig(ABC):
     """Abstract base class for deployment configuration.
     
     Defines global configurations and abstract properties for inheriting deployments.
+    
+    Note:
+        The deployment attempts to load a secret key for flask sessions from the
+        file specified in the environment variable 'SESSION_KEY_FILE', and falls-back to using
+        a random session key on failure.
+        
+        If the setup is containerized (via docker) it is highly reccommended to use docker secrets
+        for this file.
     """
     # Disables flask-sqlalchemy modification tracking (inefficient)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -27,6 +35,12 @@ class DeploymentConfig(ABC):
     SECRET_KEY = os.urandom(SESSION_KEY_BYTES)
     # enables flask sessions and flask cookie signing
     SESSION_USE_SIGNER = True
+    
+    # if a session key secret is specified, use it instead of the random one
+    _session_key_path = os.environ.get('SESSION_KEY_FILE')
+    if _session_key_path is not None:
+        with open(_session_key_path, 'rb') as _sess_key_file:
+            SECRET_KEY = _sess_key_file.read()
 
     @property
     @abstractmethod
@@ -63,20 +77,11 @@ class ProductionDeployment(DeploymentConfig):
         the environment variable 'DB_PASSWORD_FILE'. The password specifies the password for a
         genetwork account and expects the required database to exist. If the variable is missing,
         falls back to a local file sqlite db.
-        Additionally, it similarly attempts to load a secret key for flask sessions from the
-        file specified in the environment variable 'SESSION_KEY_FILE', and falls-back to using
-        a random session key on failure.
         
         If the setup is containerized (via docker) it is highly reccommended to use docker secrets
-        for these two file.
+        for this file.
     """
     DB_NAME = 'genetwork_users'
-    
-    # if a session key secret is specified, use it instead of the random one
-    _session_key_path = os.environ.get('SESSION_KEY_FILE')
-    if _session_key_path is not None:
-        with open(_session_key_path, 'rb') as _sess_key_file:
-            SECRET_KEY = _sess_key_file.read()
                 
     # if a db password is given, update sqlalchemy to use the remote db
     _db_pass_path = os.environ.get('DB_PASSWORD_FILE')
@@ -162,7 +167,7 @@ class AppConfigFactory:
     PRODUCTION_CONFIG_NAMES = ['production', None, 'prod', 'ctf', 'challenge']
 
     # Possible names for each challenge difficulty
-    EASY_CACHE_NAMES = ['flask', 'default', 'cookie', 'easy']
+    EASY_CACHE_NAMES = ['flask', 'cookie', 'easy']
     MEDIUM_CACHE_NAMES = ['aes', 'encrypt', 'encrypted', 'medium', 'normal']
     HARD_CACHE_NAMES = ['sql', 'sqlalchemy', 'hard']
 
