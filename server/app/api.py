@@ -4,7 +4,7 @@
     ajax from the user for updating pages.
     Primarily uses a json format.
 """
-from app.models import SessionUsers, Villain
+from app.models import SessionUsers, Villain, User
 from flask import jsonify, request, Blueprint, render_template, current_app
 from app.config.avatar import Avatar
 from functools import wraps
@@ -139,7 +139,7 @@ async def fetch_part_from_user(uid, part_name):
     Returns:
         dict: part_dict of drawing details for the requested body part
     """
-    user = SessionUsers.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter(User.user_id==uid).first()
     current_app.db.session.commit()
     if user is None:
         raise ValueError("User id not found")
@@ -157,7 +157,7 @@ async def is_user_visible(uid):
     Returns:
         bool: True if requester is allowed, False otherwise
     """
-    user = SessionUsers.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter(User.user_id==uid).first()
     # This Raven Darksomething asked us to let her know when she is being queried
     # weird, but she pays well...
     if Villain.is_villain(user):

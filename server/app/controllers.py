@@ -7,7 +7,7 @@
 """
 from flask import send_from_directory, render_template, Blueprint, abort, request, current_app
 from sqlalchemy.sql.expression import func
-from app.models import SessionUsers, Villain
+from app.models import SessionUsers, Villain, User
 import os
 import time
 
@@ -50,9 +50,9 @@ def home():
     # enforce privacy select
     privacy_select = request.form.get('privacySelect')
     if privacy_select == "private":
-        query = query.filter_by(is_private=True)
+        query = query.filter(User.is_private==True)
     elif privacy_select == "public":
-        query = query.filter_by(is_private=False)
+        query = query.filter(User.is_private==False)
 
     # enforce specified values
     if 'forceJob' in request.form:
@@ -72,7 +72,7 @@ def explore():
 @controllers.route('/user/<int:uid>')
 def show_user(uid):
     """The profile pages of users"""
-    user = SessionUsers.query.filter_by(user_id=uid).first()
+    user = SessionUsers.query.filter(User.user_id==uid).first()
     if user is None:
         abort(404)
     return render_template("profile.jinja", user=user)
